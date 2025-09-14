@@ -319,17 +319,39 @@ kubectl get nodes,pods -A
 
 ---
 
-**🎯 Fortune 500-grade Kubernetes platform with zero-touch automation, enterprise security, and 99.99% SLA.**
+**🎯 Production-ready Kubernetes platform with enterprise-grade security, compliance, and automation.**
 
 *Built for mission-critical workloads requiring maximum security, compliance, and operational excellence.*
 
-## 🏆 Enterprise Guarantees
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Security Scan](https://img.shields.io/github/workflow/status/uldyssian-sh/enterprise-eks-multi-az-cluster/Security%20Scan?style=for-the-badge&label=Security)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/actions)
+[![Code Quality](https://img.shields.io/codeclimate/maintainability/uldyssian-sh/enterprise-eks-multi-az-cluster?style=for-the-badge)](https://codeclimate.com/github/uldyssian-sh/enterprise-eks-multi-az-cluster)
+[![Contributors](https://img.shields.io/github/contributors/uldyssian-sh/enterprise-eks-multi-az-cluster?style=for-the-badge)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/graphs/contributors)
 
-- **✅ Zero Single Points of Failure** - Fully redundant architecture
-- **✅ 99.99% Uptime SLA** - 4.38 minutes downtime/month maximum
-- **✅ RTO < 5 minutes** - Disaster recovery time objective
-- **✅ RPO < 1 minute** - Data loss prevention
-- **✅ Multi-region resilience** - Cross-region failover capability
-- **✅ Enterprise security** - 6 compliance standards
-- **✅ Zero-touch automation** - Fully automated operations
-- **✅ Cost optimization** - 50-90% savings with spot instances
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](.github/CONTRIBUTING.md) for details.
+
+## 🔒 Security
+
+Security is our top priority. Please see our [Security Policy](.github/SECURITY.md) for reporting vulnerabilities.
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+- 🐛 **Bug Reports**: [Create an issue](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/issues/new?template=bug_report.md)
+- ✨ **Feature Requests**: [Request a feature](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/issues/new?template=feature_request.md)
+- 💬 **Discussions**: [Join the discussion](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/discussions)
+
+---
+
+<div align="center">
+
+**Built with ❤️ for the DevOps community**
+
+[⭐ Star this repo](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster) • [🍴 Fork it](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/fork) • [📖 Documentation](docs/) • [🚀 Deploy Now](#-zero-touch-deployment)
+
+</div>

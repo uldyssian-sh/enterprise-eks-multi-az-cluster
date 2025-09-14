@@ -2,58 +2,92 @@
 *.tfstate
 *.tfstate.*
 *.tfvars
+*.tfvars.json
 .terraform/
 .terraform.lock.hcl
 terraform.tfplan
-terraform.tfplan.json
+terraform.tfplan.*
 
 # AWS
 .aws/
-aws-credentials.json
+aws-credentials
+*.pem
+*.key
 
 # Kubernetes
-kubeconfig*
+kubeconfig
 *.kubeconfig
+kube-config
 
-# Logs
-*.log
-logs/
+# Secrets and sensitive files
+secrets/
+*.secret
+*.env
+.env*
+credentials
+*-credentials
+*-secrets
 
-# IDE
+# IDE and editors
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# OS
+*~
 .DS_Store
+
+# Logs
+*.log
+logs/
+*.out
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Backup files
+*.backup
+*.bak
+*.orig
+
+# OS generated files
 Thumbs.db
-
-# Secrets
-secrets/
-*.pem
-*.key
-*.crt
-
-# Build artifacts
-dist/
-build/
-target/
-
-# Node modules
-node_modules/
+ehthumbs.db
+Desktop.ini
 
 # Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 .Python
 env/
 venv/
 .venv/
 
-# Temporary files
-tmp/
-temp/
-*.tmp
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+
+# Helm
+charts/*.tgz
+requirements.lock
+
+# Local development
+.local/
+local/
+dev-override.tf
+dev-override.tfvars
