@@ -17,19 +17,19 @@ spec:
         
         # CIS 5.1.3 - Minimize wildcard use in Roles and ClusterRoles
         violation[{"msg": msg}] {
-          input.review.object.kind == "Role"
+          input.review.object.kind in ["Role", "ClusterRole"]
           rule := input.review.object.rules[_]
           "*" in rule.resources
-          msg := "Role should not use wildcard in resources"
+          msg := sprintf("%s should not use wildcard in resources", [input.review.object.kind])
         }
         
         # CIS 5.1.4 - Minimize access to create pods
         violation[{"msg": msg}] {
-          input.review.object.kind == "Role"
+          input.review.object.kind in ["Role", "ClusterRole"]
           rule := input.review.object.rules[_]
           "pods" in rule.resources
           "create" in rule.verbs
-          msg := "Role should minimize pod creation access"
+          msg := sprintf("%s should minimize pod creation access", [input.review.object.kind])
         }
 ---
 apiVersion: constraints.gatekeeper.sh/v1beta1

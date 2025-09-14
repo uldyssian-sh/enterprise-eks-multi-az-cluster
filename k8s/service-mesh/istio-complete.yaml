@@ -58,6 +58,6 @@ spec:
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: enterprise-tls
+      credentialName: istio-tls-cert
     hosts:
     - "*"

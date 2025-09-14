@@ -6,11 +6,11 @@ echo "🔒 Running enterprise security audit..."
 
 # Check cluster security
 echo "🛡️ Checking cluster security configuration..."
-kubectl get psp,networkpolicies,podsecuritypolicy -A 2>/dev/null || echo "⚠️ Some security resources not found"
+kubectl get psp,networkpolicies,podsecuritypolicy -A 2>/dev/null || { echo "⚠️ Some security resources not found"; exit 1; }
 
 # Check RBAC
 echo "👥 Auditing RBAC configuration..."
-kubectl auth can-i --list --as=system:anonymous 2>/dev/null | head -5
+kubectl auth can-i --list --as=system:anonymous 2>/dev/null | head -5 || { echo "❌ RBAC check failed"; exit 1; }
 echo "✅ Anonymous access restrictions verified"
 
 # Check pod security contexts
@@ -29,7 +29,7 @@ echo "📊 Namespaces without network policies: $NAMESPACES_WITHOUT_NETPOL"
 
 # Check secrets encryption
 echo "🔑 Checking secrets encryption..."
-kubectl get secrets -A --field-selector type=Opaque | wc -l | xargs -I {} echo "📊 Opaque secrets found: {}"
+kubectl get secrets -A --field-selector type=Opaque 2>/dev/null | wc -l | xargs -I {} echo "📊 Opaque secrets found: {}" || { echo "❌ Secrets check failed"; exit 1; }
 
 # Security score calculation
 TOTAL_CHECKS=4

@@ -77,6 +77,22 @@ spec:
   - Ingress
   - Egress
   ingress:
-  - {}
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    ports:
+    - protocol: TCP
+      port: 15010
+    - protocol: TCP
+      port: 15011
   egress:
-  - {}
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    ports:
+    - protocol: TCP
+      port: 15010
+    - protocol: TCP
+      port: 15011

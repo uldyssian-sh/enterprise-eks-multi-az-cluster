@@ -356,6 +356,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built with ❤️ for the DevOps community**
 
+**Author:** LT (uldyssian-sh)
+
 [⭐ Star this repo](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster) • [🍴 Fork it](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/fork) • [📖 Documentation](docs/) • [🚀 Deploy Now](#-zero-touch-deployment)
 
 </div>

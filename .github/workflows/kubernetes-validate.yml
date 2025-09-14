@@ -20,9 +20,10 @@ jobs:
       
     - name: Setup kubeval
       run: |
-        wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
-        tar xf kubeval-linux-amd64.tar.gz
-        sudo mv kubeval /usr/local/bin
+        set -e
+        wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz || { echo "Failed to download kubeval"; exit 1; }
+        tar xf kubeval-linux-amd64.tar.gz || { echo "Failed to extract kubeval"; exit 1; }
+        sudo mv kubeval /usr/local/bin || { echo "Failed to install kubeval"; exit 1; }
         
     - name: Validate Kubernetes manifests
       run: |
@@ -30,9 +31,10 @@ jobs:
         
     - name: Setup kube-score
       run: |
-        wget https://github.com/zegl/kube-score/releases/download/v1.16.1/kube-score_1.16.1_linux_amd64.tar.gz
-        tar xzf kube-score_1.16.1_linux_amd64.tar.gz
-        sudo mv kube-score /usr/local/bin
+        set -e
+        wget https://github.com/zegl/kube-score/releases/download/v1.16.1/kube-score_1.16.1_linux_amd64.tar.gz || { echo "Failed to download kube-score"; exit 1; }
+        tar xzf kube-score_1.16.1_linux_amd64.tar.gz || { echo "Failed to extract kube-score"; exit 1; }
+        sudo mv kube-score /usr/local/bin || { echo "Failed to install kube-score"; exit 1; }
         
     - name: Run kube-score
       run: |
