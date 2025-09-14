@@ -345,6 +345,8 @@ kubectl get nodes,pods -A
 
 We welcome contributions! Please see our [Contributing Guide](.github/CONTRIBUTING.md) for details.
 
+**Branch Protection**: Main branch is protected - all changes require PR with approvals and passing CI checks.
+
 ## 🔒 Security
 
 Security is our top priority. Please see our [Security Policy](.github/SECURITY.md) for reporting vulnerabilities.
