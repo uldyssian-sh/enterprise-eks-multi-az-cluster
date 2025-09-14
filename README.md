@@ -84,6 +84,17 @@
 
 ## 🏗️ Enterprise High-Level Architecture
 
+<div align="center">
+
+![Enterprise Architecture](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/assets/placeholder/enterprise-architecture.png)
+
+*Multi-AZ EKS cluster with zero SPOF design across 3 availability zones*
+
+</div>
+
+<details>
+<summary>📊 View Detailed Architecture Diagram</summary>
+
 ```mermaid
 graph TB
     subgraph "🌍 Global Infrastructure"
@@ -325,6 +336,8 @@ graph TB
     class ChaosMonkey,LitmusChaos chaos
 ```
 
+</details>
+
 ## 🎯 Architecture Highlights
 
 ### 🔄 Zero Single Points of Failure
@@ -360,6 +373,17 @@ graph TB
 | **SLA** | 99.9% | 99.99% | 99.999% |
 
 ### 🔒 Security Architecture
+
+<div align="center">
+
+![Security Architecture](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/assets/placeholder/security-architecture.png)
+
+*Defense in Depth security model with 4-layer protection*
+
+</div>
+
+<details>
+<summary>🔒 View Security Layers Diagram</summary>
 
 ```mermaid
 graph LR
@@ -410,6 +434,8 @@ graph LR
     SecretsManager --> EBS
     EBS --> S3
 ```
+
+</details>
 
 ### 🏗️ High Availability & Zero SPOF
 
