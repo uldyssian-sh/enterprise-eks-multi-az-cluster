@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: database-operators
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-operator
+  namespace: database-operators
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-operator
+  template:
+    metadata:
+      labels:
+        app: postgres-operator
+    spec:
+      containers:
+      - name: postgres-operator
+        image: registry.opensource.zalan.do/acid/postgres-operator:v1.10.1
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true

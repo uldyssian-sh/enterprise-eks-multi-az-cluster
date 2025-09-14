@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-operator
+  namespace: database-operators
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-operator
+  template:
+    metadata:
+      labels:
+        app: redis-operator
+    spec:
+      containers:
+      - name: redis-operator
+        image: spotahome/redis-operator:v1.2.4
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"

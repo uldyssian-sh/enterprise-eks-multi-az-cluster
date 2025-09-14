@@ -11,7 +11,13 @@ variable "vpc_id" {
 variable "allowed_cidr_blocks" {
   description = "List of CIDR blocks allowed to access the cluster"
   type        = list(string)
-  default     = ["0.0.0.0/0"]
+  default     = []
+}
+
+variable "kms_key_arn" {
+  description = "KMS key ARN for encryption"
+  type        = string
+  default     = ""
 }
 
 variable "tags" {

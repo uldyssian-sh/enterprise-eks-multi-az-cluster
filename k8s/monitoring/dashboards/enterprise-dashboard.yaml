@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: enterprise-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  enterprise-overview.json: |
+    {
+      "dashboard": {
+        "id": null,
+        "title": "Enterprise EKS Overview",
+        "tags": ["kubernetes", "enterprise"],
+        "timezone": "browser",
+        "panels": [
+          {
+            "id": 1,
+            "title": "Cluster Health Score",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "100 * (up{job=\"kubernetes-nodes\"} / on() group_left() count(up{job=\"kubernetes-nodes\"}))",
+                "legendFormat": "Health Score"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "color": {"mode": "thresholds"},
+                "thresholds": {
+                  "steps": [
+                    {"color": "red", "value": 0},
+                    {"color": "yellow", "value": 80},
+                    {"color": "green", "value": 95}
+                  ]
+                }
+              }
+            },
+            "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0}
+          },
+          {
+            "id": 2,
+            "title": "Security Events",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(falco_events_total[5m])",
+                "legendFormat": "Security Events/sec"
+              }
+            ],
+            "gridPos": {"h": 8, "w": 18, "x": 6, "y": 0}
+          },
+          {
+            "id": 3,
+            "title": "Cost Optimization",
+            "type": "table",
+            "targets": [
+              {
+                "expr": "kube_node_labels{label_node_kubernetes_io_lifecycle=\"spot\"}",
+                "legendFormat": "Spot Instances"
+              }
+            ],
+            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+          }
+        ],
+        "time": {"from": "now-1h", "to": "now"},
+        "refresh": "30s"
+      }
+    }

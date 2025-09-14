@@ -1,0 +1,87 @@
+resource "aws_cloudwatch_dashboard" "eks" {
+  dashboard_name = "${var.cluster_name}-dashboard"
+
+  dashboard_body = jsonencode({
+    widgets = [
+      {
+        type   = "metric"
+        x      = 0
+        y      = 0
+        width  = 12
+        height = 6
+
+        properties = {
+          metrics = [
+            ["AWS/EKS", "cluster_failed_request_count", "ClusterName", var.cluster_name],
+            [".", "cluster_request_total", ".", "."]
+          ]
+          period = 300
+          stat   = "Sum"
+          region = var.aws_region
+          title  = "EKS API Server Metrics"
+        }
+      },
+      {
+        type   = "metric"
+        x      = 0
+        y      = 6
+        width  = 12
+        height = 6
+
+        properties = {
+          metrics = [
+            ["AWS/EC2", "CPUUtilization", "AutoScalingGroupName", "${var.cluster_name}-nodes"],
+            [".", "NetworkIn", ".", "."],
+            [".", "NetworkOut", ".", "."]
+          ]
+          period = 300
+          stat   = "Average"
+          region = var.aws_region
+          title  = "Node Metrics"
+        }
+      }
+    ]
+  })
+
+  tags = var.tags
+}
+
+resource "aws_cloudwatch_metric_alarm" "node_cpu_high" {
+  alarm_name          = "${var.cluster_name}-node-cpu-high"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "Node CPU utilization high"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  tags                = var.tags
+}
+
+resource "aws_cloudwatch_metric_alarm" "pod_restart_high" {
+  alarm_name          = "${var.cluster_name}-pod-restart-high"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "pod_restart_total"
+  namespace           = "ContainerInsights"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "10"
+  alarm_description   = "High pod restart rate"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  tags                = var.tags
+}
+
+resource "aws_cloudwatch_log_metric_filter" "error_count" {
+  name           = "${var.cluster_name}-error-count"
+  log_group_name = aws_cloudwatch_log_group.eks.name
+  pattern        = "ERROR"
+
+  metric_transformation {
+    name      = "ErrorCount"
+    namespace = "EKS/Logs"
+    value     = "1"
+  }
+}

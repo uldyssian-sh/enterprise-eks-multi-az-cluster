@@ -1,0 +1,65 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: prometheus-vpa
+  namespace: monitoring
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: prometheus
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+    - containerName: prometheus
+      maxAllowed:
+        cpu: 4
+        memory: 16Gi
+      minAllowed:
+        cpu: 200m
+        memory: 1Gi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: grafana-vpa
+  namespace: monitoring
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: grafana
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+    - containerName: grafana
+      maxAllowed:
+        cpu: 2
+        memory: 4Gi
+      minAllowed:
+        cpu: 100m
+        memory: 256Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: falco-vpa
+  namespace: falco
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: DaemonSet
+    name: falco
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+    - containerName: falco
+      maxAllowed:
+        cpu: 1
+        memory: 2Gi
+      minAllowed:
+        cpu: 50m
+        memory: 128Mi

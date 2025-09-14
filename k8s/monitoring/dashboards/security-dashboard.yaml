@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: security-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  security-monitoring.json: |
+    {
+      "dashboard": {
+        "title": "Security Monitoring",
+        "panels": [
+          {
+            "title": "Falco Security Events",
+            "type": "graph",
+            "targets": [{"expr": "rate(falco_events_total[5m])"}]
+          },
+          {
+            "title": "Failed Login Attempts", 
+            "type": "stat",
+            "targets": [{"expr": "increase(apiserver_audit_total{verb=\"create\",objectRef_resource=\"pods\"}[5m])"}]
+          }
+        ]
+      }
+    }

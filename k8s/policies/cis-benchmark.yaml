@@ -1,0 +1,43 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8scisbenchmark
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sCISBenchmark
+      validation:
+        openAPIV3Schema:
+          type: object
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8scisbenchmark
+        
+        # CIS 5.1.3 - Minimize wildcard use in Roles and ClusterRoles
+        violation[{"msg": msg}] {
+          input.review.object.kind == "Role"
+          rule := input.review.object.rules[_]
+          "*" in rule.resources
+          msg := "Role should not use wildcard in resources"
+        }
+        
+        # CIS 5.1.4 - Minimize access to create pods
+        violation[{"msg": msg}] {
+          input.review.object.kind == "Role"
+          rule := input.review.object.rules[_]
+          "pods" in rule.resources
+          "create" in rule.verbs
+          msg := "Role should minimize pod creation access"
+        }
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sCISBenchmark
+metadata:
+  name: cis-benchmark-compliance
+spec:
+  match:
+    kinds:
+      - apiGroups: ["rbac.authorization.k8s.io"]
+        kinds: ["Role", "ClusterRole"]

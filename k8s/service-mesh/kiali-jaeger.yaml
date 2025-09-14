@@ -1,0 +1,94 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kiali
+  namespace: istio-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kiali
+  namespace: istio-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kiali
+  template:
+    metadata:
+      labels:
+        app: kiali
+    spec:
+      serviceAccountName: kiali
+      containers:
+      - name: kiali
+        image: quay.io/kiali/kiali:v1.73.0
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        ports:
+        - containerPort: 20001
+        env:
+        - name: ACTIVE_NAMESPACE
+          value: istio-system
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kiali
+  namespace: istio-system
+spec:
+  selector:
+    app: kiali
+  ports:
+  - port: 20001
+    targetPort: 20001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaeger
+  namespace: istio-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jaeger
+  template:
+    metadata:
+      labels:
+        app: jaeger
+    spec:
+      containers:
+      - name: jaeger
+        image: jaegertracing/all-in-one:1.49.0
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65534
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        ports:
+        - containerPort: 16686
+        env:
+        - name: COLLECTOR_OTLP_ENABLED
+          value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger
+  namespace: istio-system
+spec:
+  selector:
+    app: jaeger
+  ports:
+  - name: http
+    port: 16686
+    targetPort: 16686
