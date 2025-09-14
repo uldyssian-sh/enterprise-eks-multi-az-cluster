@@ -2,13 +2,23 @@
 
 **Fortune 500-grade Kubernetes platform with zero-touch automation, enterprise security, and multi-region resilience.**
 
-[![Security Score](https://img.shields.io/badge/Security-98%2F100-brightgreen)](#security-standards)
-[![Compliance](https://img.shields.io/badge/Compliance-6%20Standards-blue)](#security-standards)
-[![Automation](https://img.shields.io/badge/Automation-100%25-green)](#automation)
-[![Uptime](https://img.shields.io/badge/SLA-99.99%25-success)](#architecture)
-[![Cost Savings](https://img.shields.io/badge/Cost%20Savings-50%25-orange)](#cost-optimization)
-[![Zero SPOF](https://img.shields.io/badge/Zero%20SPOF-✅-brightgreen)](#high-availability)
-[![RTO](https://img.shields.io/badge/RTO-<5min-blue)](#high-availability)
+<div align="center">
+
+![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
+![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white)
+
+[![Security Score](https://img.shields.io/badge/Security-98%2F100-brightgreen?style=for-the-badge)](#security-standards)
+[![Compliance](https://img.shields.io/badge/Compliance-6%20Standards-blue?style=for-the-badge)](#security-standards)
+[![Automation](https://img.shields.io/badge/Automation-100%25-green?style=for-the-badge)](#automation)
+[![Uptime](https://img.shields.io/badge/SLA-99.99%25-success?style=for-the-badge)](#architecture)
+[![Zero SPOF](https://img.shields.io/badge/Zero%20SPOF-✅-brightgreen?style=for-the-badge)](#high-availability)
+[![RTO](https://img.shields.io/badge/RTO-<5min-blue?style=for-the-badge)](#high-availability)
+
+</div>
 
 ## 🤖 Zero-Touch Deployment
 
