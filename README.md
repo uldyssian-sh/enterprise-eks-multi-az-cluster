@@ -11,6 +11,11 @@
 ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white)
 
+[![GitHub stars](https://img.shields.io/github/stars/uldyssian-sh/enterprise-eks-multi-az-cluster?style=for-the-badge&logo=github)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/uldyssian-sh/enterprise-eks-multi-az-cluster?style=for-the-badge&logo=github)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/network)
+[![GitHub issues](https://img.shields.io/github/issues/uldyssian-sh/enterprise-eks-multi-az-cluster?style=for-the-badge&logo=github)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/issues)
+[![License](https://img.shields.io/github/license/uldyssian-sh/enterprise-eks-multi-az-cluster?style=for-the-badge)](LICENSE)
+
 [![Security Score](https://img.shields.io/badge/Security-98%2F100-brightgreen?style=for-the-badge)](#security-standards)
 [![Compliance](https://img.shields.io/badge/Compliance-6%20Standards-blue?style=for-the-badge)](#security-standards)
 [![Automation](https://img.shields.io/badge/Automation-100%25-green?style=for-the-badge)](#automation)
