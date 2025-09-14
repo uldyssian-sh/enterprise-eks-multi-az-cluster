@@ -86,9 +86,9 @@
 
 <div align="center">
 
-![Enterprise Architecture](https://docs.aws.amazon.com/images/eks/latest/userguide/images/what-is-eks.png)
+![Enterprise EKS Multi-AZ Architecture](https://user-images.githubusercontent.com/placeholder/enterprise-eks-architecture.png)
 
-*Multi-AZ EKS cluster with zero SPOF design across 3 availability zones*
+*Enterprise-grade EKS cluster spanning 3 availability zones with zero single points of failure*
 
 </div>
 
@@ -376,9 +376,9 @@ graph TB
 
 <div align="center">
 
-![Security Architecture](https://docs.aws.amazon.com/images/whitepapers/latest/security-overview-aws-lambda/images/security-model.png)
+![Enterprise Security Architecture](https://user-images.githubusercontent.com/placeholder/enterprise-security-layers.png)
 
-*Defense in Depth security model with 4-layer protection*
+*Multi-layered security architecture with defense in depth approach*
 
 </div>
 
