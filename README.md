@@ -86,7 +86,7 @@
 
 <div align="center">
 
-![Enterprise EKS Multi-AZ Architecture](https://user-images.githubusercontent.com/placeholder/enterprise-eks-architecture.png)
+![Enterprise EKS Multi-AZ Architecture](https://github.com/aws-samples/eks-workshop/raw/main/static/images/3-service-mesh/architecture.png)
 
 *Enterprise-grade EKS cluster spanning 3 availability zones with zero single points of failure*
 
@@ -376,7 +376,7 @@ graph TB
 
 <div align="center">
 
-![Enterprise Security Architecture](https://user-images.githubusercontent.com/placeholder/enterprise-security-layers.png)
+![Enterprise Security Architecture](https://github.com/aws-samples/aws-security-reference-architecture-examples/raw/main/aws_sra_examples/docs/images/sra-easy-setup-architecture.png)
 
 *Multi-layered security architecture with defense in depth approach*
 
