@@ -86,7 +86,7 @@
 
 <div align="center">
 
-![Enterprise Architecture](https://d2908q01vomqb2.cloudfront.net/fe2ef495a1152561572949784c16bf23abb28057/2019/03/15/eks-architecture.png)
+![Enterprise Architecture](https://docs.aws.amazon.com/images/eks/latest/userguide/images/what-is-eks.png)
 
 *Multi-AZ EKS cluster with zero SPOF design across 3 availability zones*
 
@@ -376,7 +376,7 @@ graph TB
 
 <div align="center">
 
-![Security Architecture](https://d2908q01vomqb2.cloudfront.net/22d200f8670dbdb3e253a90eee5098477c95c23d/2020/08/14/container-security-1.png)
+![Security Architecture](https://docs.aws.amazon.com/images/whitepapers/latest/security-overview-aws-lambda/images/security-model.png)
 
 *Defense in Depth security model with 4-layer protection*
 
