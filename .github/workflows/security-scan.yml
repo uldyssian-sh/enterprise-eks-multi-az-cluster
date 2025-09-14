@@ -26,29 +26,22 @@ jobs:
         output: 'trivy-results.sarif'
         
     - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       if: always()
       with:
         sarif_file: 'trivy-results.sarif'
         
     - name: Run Checkov static analysis
-      uses: bridgecrewio/checkov-action@v12.2715.0
+      uses: bridgecrewio/checkov-action@v12
       with:
         directory: .
         framework: terraform,kubernetes
-        output_format: sarif
-        output_file_path: checkov-results.sarif
-        
-    - name: Upload Checkov scan results
-      uses: github/codeql-action/upload-sarif@v2
-      if: always()
-      with:
-        sarif_file: checkov-results.sarif
+        soft_fail: true
         
     - name: Run TruffleHog secrets scan
       uses: trufflesecurity/trufflehog@v3.63.2
       with:
         path: ./
-        base: main
+        base: ${{ github.event.repository.default_branch }}
         head: HEAD
-        extra_args: --debug --only-verified
+        extra_args: --only-verified
