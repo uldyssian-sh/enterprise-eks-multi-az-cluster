@@ -276,17 +276,24 @@ aws config get-compliance-details-by-config-rule
 
 ### 🤖 Zero-Touch Deployment
 ```bash
-# Prerequisites check
+# Using Makefile (recommended)
+make deploy-dev     # Development (15 min)
+make deploy-prod    # Production (20 min)
+make validate       # Validate all configs
+make test          # Run security tests
+
+# Or use scripts directly
 ./scripts/check-prerequisites.sh
-
-# Development environment (15 min)
 ./scripts/fully-automated-deploy.sh dev
-
-# Production environment (20 min)
 ./scripts/fully-automated-deploy.sh prod
+```
 
-# Enterprise environment (30 min)
-./scripts/fully-automated-deploy.sh enterprise
+### 🛠️ Development Environment
+```bash
+# Setup local development
+make setup-dev
+# Or manually:
+./scripts/setup-dev-environment.sh
 ```
 
 ### 📊 Health Checks
@@ -331,6 +338,8 @@ kubectl get nodes,pods -A
 [![Kubernetes](https://img.shields.io/github/actions/workflow/status/uldyssian-sh/enterprise-eks-multi-az-cluster/kubernetes-validate.yml?style=for-the-badge&label=Kubernetes)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/actions)
 [![Contributors](https://img.shields.io/github/contributors/uldyssian-sh/enterprise-eks-multi-az-cluster?style=for-the-badge)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/graphs/contributors)
 [![Wiki](https://img.shields.io/badge/Wiki-Documentation-blue?style=for-the-badge)](docs/wiki/Home.md)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?style=for-the-badge&logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![Make](https://img.shields.io/badge/Built%20with-Make-1f425f.svg?style=for-the-badge)](Makefile)
 
 ## 🤝 Contributing
 

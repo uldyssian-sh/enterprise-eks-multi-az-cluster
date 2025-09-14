@@ -1,0 +1,32 @@
+name: Performance Testing
+
+on:
+  schedule:
+    - cron: '0 2 * * 0'  # Weekly on Sunday
+  workflow_dispatch:
+
+jobs:
+  performance-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v3
+      
+    - name: Run performance tests
+      run: |
+        echo "🚀 Running performance benchmarks"
+        ./scripts/performance-report.sh
+        
+    - name: Load test with k6
+      run: |
+        docker run --rm -v $PWD:/scripts grafana/k6 run /scripts/tests/load-test.js
+        
+    - name: Upload results
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-results
+        path: performance-*.json
