@@ -32,7 +32,7 @@ jobs:
         sarif_file: 'trivy-results.sarif'
         
     - name: Run Checkov static analysis
-      uses: bridgecrewio/checkov-action@v12.2715.0
+      uses: bridgecrewio/checkov-action@v12.3058.0
       with:
         directory: .
         framework: terraform,kubernetes
