@@ -264,11 +264,13 @@ aws config get-compliance-details-by-config-rule
 ```
 
 ## 📚 Documentation
-- [Security Standards](docs/SECURITY-STANDARDS.md) - SOC2, PCI DSS, GDPR compliance
-- [Enterprise Features](docs/COMPLETE-ENTERPRISE-FEATURES.md) - Complete feature overview
-- [High Availability](docs/HIGH-AVAILABILITY.md) - Zero SPOF architecture
-- [Dev vs Prod](docs/DEV-VS-PROD.md) - Environment specifications
-- [Automation Guide](docs/AUTOMATION.md) - Zero-touch deployment
+
+- **[📖 Wiki](docs/wiki/Home.md)** - Comprehensive documentation
+- **[🚀 Quick Start](docs/wiki/Quick-Start-Guide.md)** - Get started in 15 minutes
+- **[🏗️ Architecture](docs/wiki/System-Architecture.md)** - System design and components
+- **[🔒 Security](docs/SECURITY-STANDARDS.md)** - SOC2, PCI DSS, GDPR compliance
+- **[🛣️ Roadmap](docs/ROADMAP.md)** - Future features and releases
+- **[📋 Changelog](CHANGELOG.md)** - Version history and changes
 
 ## 🚀 Quick Start Commands
 
@@ -324,9 +326,11 @@ kubectl get nodes,pods -A
 *Built for mission-critical workloads requiring maximum security, compliance, and operational excellence.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Security Scan](https://img.shields.io/github/workflow/status/uldyssian-sh/enterprise-eks-multi-az-cluster/Security%20Scan?style=for-the-badge&label=Security)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/actions)
-[![Code Quality](https://img.shields.io/codeclimate/maintainability/uldyssian-sh/enterprise-eks-multi-az-cluster?style=for-the-badge)](https://codeclimate.com/github/uldyssian-sh/enterprise-eks-multi-az-cluster)
+[![Security Scan](https://img.shields.io/github/actions/workflow/status/uldyssian-sh/enterprise-eks-multi-az-cluster/security-scan.yml?style=for-the-badge&label=Security)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/actions)
+[![Terraform](https://img.shields.io/github/actions/workflow/status/uldyssian-sh/enterprise-eks-multi-az-cluster/terraform-validate.yml?style=for-the-badge&label=Terraform)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/actions)
+[![Kubernetes](https://img.shields.io/github/actions/workflow/status/uldyssian-sh/enterprise-eks-multi-az-cluster/kubernetes-validate.yml?style=for-the-badge&label=Kubernetes)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/actions)
 [![Contributors](https://img.shields.io/github/contributors/uldyssian-sh/enterprise-eks-multi-az-cluster?style=for-the-badge)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/graphs/contributors)
+[![Wiki](https://img.shields.io/badge/Wiki-Documentation-blue?style=for-the-badge)](docs/wiki/Home.md)
 
 ## 🤝 Contributing
 

@@ -1,0 +1,39 @@
+name: Kubernetes Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'k8s/**'
+      - '.github/workflows/kubernetes-validate.yml'
+
+jobs:
+  kubernetes-validate:
+    name: Kubernetes Manifests Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup kubeval
+      run: |
+        wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+        tar xf kubeval-linux-amd64.tar.gz
+        sudo mv kubeval /usr/local/bin
+        
+    - name: Validate Kubernetes manifests
+      run: |
+        find k8s/ -name '*.yaml' -o -name '*.yml' | xargs kubeval
+        
+    - name: Setup kube-score
+      run: |
+        wget https://github.com/zegl/kube-score/releases/download/v1.16.1/kube-score_1.16.1_linux_amd64.tar.gz
+        tar xzf kube-score_1.16.1_linux_amd64.tar.gz
+        sudo mv kube-score /usr/local/bin
+        
+    - name: Run kube-score
+      run: |
+        find k8s/ -name '*.yaml' -o -name '*.yml' | xargs kube-score score
