@@ -23,7 +23,7 @@ jobs:
         terraform init
         terraform validate
     - name: Security Scan
-      uses: aquasecurity/trivy-action@0.12.0
+      uses: aquasecurity/trivy-action@0.33.1
       with:
         scan-type: 'fs'
         scan-ref: '.'
