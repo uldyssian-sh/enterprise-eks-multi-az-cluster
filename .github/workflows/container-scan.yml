@@ -33,7 +33,7 @@ jobs:
         image-ref: 'test-image'
         format: 'table'
         exit-code: '0'
-      if: hashFiles('Dockerfile') != ''
+      if: hashFiles('Dockerfile') != '' && success()
       
     - name: Run Hadolint Dockerfile linter
       uses: hadolint/hadolint-action@v3.1.0

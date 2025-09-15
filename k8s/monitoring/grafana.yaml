@@ -25,6 +25,18 @@ spec:
             - ALL
         ports:
         - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
         env:
         - name: GF_SECURITY_ADMIN_PASSWORD
           valueFrom:

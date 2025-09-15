@@ -7,7 +7,7 @@ echo "🔒 Running comprehensive security scan..."
 # Container image vulnerability scan
 echo "🐳 Scanning container images..."
 if command -v trivy >/dev/null 2>&1; then
-    kubectl get pods -A -o jsonpath='{range .items[*]}{.spec.containers[*].image}{"\n"}{end}' | sort -u | head -5 | while read image; do
+    kubectl get pods -A -o jsonpath='{range .items[*]}{.spec.containers[*].image}{"\n"}{end}' | sort -u | while read image; do
         echo "  Scanning: $image"
         trivy image --severity HIGH,CRITICAL --quiet "$image" || echo "    ⚠️ Scan failed for $image"
     done

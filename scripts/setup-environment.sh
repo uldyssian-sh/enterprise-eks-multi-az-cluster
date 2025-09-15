@@ -27,6 +27,10 @@ export EKS_AWS_REGION=$AWS_REGION
 TFVARS_FILE="terraform/environments/$ENVIRONMENT/terraform.tfvars"
 if [ ! -f "$TFVARS_FILE" ]; then
     echo "📝 Creating $TFVARS_FILE"
+    if ! mkdir -p "$(dirname "$TFVARS_FILE")"; then
+        echo "❌ Failed to create directory"
+        exit 1
+    fi
     cat > "$TFVARS_FILE" << EOF
 aws_region = "$AWS_REGION"
 EOF

@@ -57,7 +57,12 @@ resource "aws_cloudwatch_metric_alarm" "node_cpu_high" {
   threshold           = "80"
   alarm_description   = "Node CPU utilization high"
   alarm_actions       = [aws_sns_topic.alerts.arn]
-  tags                = var.tags
+
+  dimensions = {
+    AutoScalingGroupName = "${var.cluster_name}-nodes"
+  }
+
+  tags = var.tags
 }
 
 resource "aws_cloudwatch_metric_alarm" "pod_restart_high" {
@@ -71,7 +76,12 @@ resource "aws_cloudwatch_metric_alarm" "pod_restart_high" {
   threshold           = "10"
   alarm_description   = "High pod restart rate"
   alarm_actions       = [aws_sns_topic.alerts.arn]
-  tags                = var.tags
+
+  dimensions = {
+    ClusterName = var.cluster_name
+  }
+
+  tags = var.tags
 }
 
 resource "aws_cloudwatch_log_metric_filter" "error_count" {

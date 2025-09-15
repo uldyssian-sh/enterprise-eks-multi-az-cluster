@@ -39,17 +39,26 @@ spec:
         - name: config
           mountPath: /etc/prometheus
           readOnly: true
+        - name: storage
+          mountPath: /prometheus
         readinessProbe:
           httpGet:
             path: /-/ready
             port: 9090
           initialDelaySeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
         livenessProbe:
           httpGet:
             path: /-/healthy
             port: 9090
           initialDelaySeconds: 60
+          timeoutSeconds: 10
+          failureThreshold: 3
       volumes:
       - name: config
         configMap:
           name: prometheus-config
+      - name: storage
+        persistentVolumeClaim:
+          claimName: prometheus-storage
