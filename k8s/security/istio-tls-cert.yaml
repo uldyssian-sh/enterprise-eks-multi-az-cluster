@@ -1,13 +1,4 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: istio-tls-cert
-  namespace: istio-system
-type: kubernetes.io/tls
-data:
-  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0t  # Replace with actual certificate
-  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0t  # Replace with actual private key
----
+# Secret will be automatically created by cert-manager Certificate resource
 # Self-signed certificate for development
 # For production, use proper CA-signed certificates
 apiVersion: cert-manager.io/v1

@@ -10,7 +10,7 @@ echo "📊 Cluster: $CLUSTER_NAME"
 
 # Node cost analysis
 echo "🖥️ Node cost analysis:"
-kubectl get nodes -o custom-columns="NAME:.metadata.name,INSTANCE-TYPE:.metadata.labels.node\.kubernetes\.io/instance-type,ZONE:.metadata.labels.topology\.kubernetes\.io/zone" --no-headers | while read name type zone; do
+kubectl get nodes -o custom-columns="NAME:.metadata.name,INSTANCE-TYPE:.metadata.labels.node\.kubernetes\.io/instance-type,ZONE:.metadata.labels.topology\.kubernetes\.io/zone" --no-headers | while read "name" "type" "zone"; do
     echo "  Node: $name ($type in $zone)"
 done
 
@@ -24,7 +24,7 @@ echo "  Spot nodes: $SPOT_NODES/$TOTAL_NODES ($SPOT_PERCENTAGE%)"
 
 # Resource utilization
 echo "📈 Resource utilization:"
-kubectl top nodes 2>/dev/null | tail -n +2 | while read name cpu_usage cpu_percent mem_usage mem_percent; do
+kubectl top nodes 2>/dev/null | tail -n +2 | while read name "cpu_usage" "cpu_percent" "mem_usage" "mem_percent"; do
     echo "  $name: CPU $cpu_percent, Memory $mem_percent"
 done || echo "  Metrics server not available"
 

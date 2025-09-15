@@ -22,8 +22,12 @@ jobs:
         
     - name: Check required files
       run: |
+        set -e
         echo "📋 Checking required files..."
-        test -f README.md && echo "✅ README.md exists"
-        test -f LICENSE && echo "✅ LICENSE exists"
-        test -f Makefile && echo "✅ Makefile exists"
+        test -f README.md
+        echo "✅ README.md exists"
+        test -f LICENSE
+        echo "✅ LICENSE exists"
+        test -f Makefile
+        echo "✅ Makefile exists"
         echo "✅ All required files present"

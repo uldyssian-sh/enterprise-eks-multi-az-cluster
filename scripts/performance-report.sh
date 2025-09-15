@@ -64,8 +64,17 @@ TOTAL_NODES=$(kubectl get nodes --no-headers | wc -l)
 RUNNING_PODS=$(kubectl get pods -A --no-headers | grep -c "Running" || echo "0")
 TOTAL_PODS=$(kubectl get pods -A --no-headers | wc -l)
 
-NODE_HEALTH_SCORE=$((HEALTHY_NODES * 100 / TOTAL_NODES))
-POD_HEALTH_SCORE=$((RUNNING_PODS * 100 / TOTAL_PODS))
+if [ "$TOTAL_NODES" -eq 0 ]; then
+  NODE_HEALTH_SCORE=0
+else
+  NODE_HEALTH_SCORE=$((HEALTHY_NODES * 100 / TOTAL_NODES))
+fi
+
+if [ "$TOTAL_PODS" -eq 0 ]; then
+  POD_HEALTH_SCORE=0
+else
+  POD_HEALTH_SCORE=$((RUNNING_PODS * 100 / TOTAL_PODS))
+fi
 OVERALL_SCORE=$(((NODE_HEALTH_SCORE + POD_HEALTH_SCORE) / 2))
 
 echo "📊 Performance Summary:"
