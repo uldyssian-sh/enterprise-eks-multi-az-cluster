@@ -25,6 +25,7 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
 }
 
 resource "aws_sns_topic" "alerts" {
+  name              = "${var.cluster_name}-alerts"
   display_name      = "${var.cluster_name}-alerts"
   kms_master_key_id = var.kms_key_arn
   tags              = var.tags

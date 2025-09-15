@@ -4,6 +4,14 @@ set -e
 
 echo "🔒 Running comprehensive security scan..."
 
+# Check dependencies
+for cmd in jq kubectl; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "❌ Required tool '$cmd' not found"
+        exit 1
+    fi
+done
+
 # Container image vulnerability scan
 echo "🐳 Scanning container images..."
 if command -v trivy >/dev/null 2>&1; then
@@ -25,7 +33,7 @@ fi
 
 # Network policy validation
 echo "🌐 Checking network security..."
-NAMESPACES_WITHOUT_NETPOL=$(kubectl get namespaces -o json | jq -r '.items[] | select(.metadata.name != "kube-system" and .metadata.name != "kube-public" and .metadata.name != "kube-node-lease") | .metadata.name' | while read ns; do
+NAMESPACES_WITHOUT_NETPOL=$(kubectl get namespaces -o json | jq -r '.items[] | select(.metadata.name != "kube-system" and .metadata.name != "kube-public" and .metadata.name != "kube-node-lease") | .metadata.name' | while read -r ns; do
     if ! kubectl get networkpolicy -n "$ns" >/dev/null 2>&1; then
         echo "$ns"
     fi

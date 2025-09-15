@@ -23,8 +23,7 @@ spec:
         
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
-          container.securityContext
-          not container.securityContext.runAsNonRoot
+          container.securityContext.runAsNonRoot != true
           msg := "Container must run as non-root user"
         }
 ---

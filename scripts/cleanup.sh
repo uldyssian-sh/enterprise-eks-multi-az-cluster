@@ -14,12 +14,12 @@ terraform destroy -auto-approve -input=false >/dev/null 2>&1 || {
   
   # Force cleanup all resources
   # Delete node groups
-  aws eks list-nodegroups --cluster-name eks-multi-az-cluster-$ENVIRONMENT --region $AWS_REGION --query 'nodegroups' --output text 2>/dev/null | xargs -n1 -I {} aws eks delete-nodegroup --cluster-name eks-multi-az-cluster-$ENVIRONMENT --nodegroup-name {} --region $AWS_REGION >/dev/null 2>&1 || true
+  aws eks list-nodegroups --cluster-name "eks-multi-az-cluster-$ENVIRONMENT" --region "$AWS_REGION" --query 'nodegroups' --output text 2>/dev/null | xargs -n1 -I {} aws eks delete-nodegroup --cluster-name "eks-multi-az-cluster-$ENVIRONMENT" --nodegroup-name {} --region "$AWS_REGION" >/dev/null 2>&1 || true
   
   # Wait and delete cluster
-  aws eks wait nodegroup-deleted --cluster-name eks-multi-az-cluster-$ENVIRONMENT --nodegroup-name eks-multi-az-cluster-$ENVIRONMENT-nodes --region $AWS_REGION >/dev/null 2>&1 || true
-  aws eks delete-cluster --name eks-multi-az-cluster-$ENVIRONMENT --region $AWS_REGION >/dev/null 2>&1 || true
-  aws eks wait cluster-deleted --name eks-multi-az-cluster-$ENVIRONMENT --region $AWS_REGION >/dev/null 2>&1 || true
+  aws eks wait nodegroup-deleted --cluster-name "eks-multi-az-cluster-$ENVIRONMENT" --nodegroup-name "eks-multi-az-cluster-$ENVIRONMENT-nodes" --region "$AWS_REGION" >/dev/null 2>&1 || true
+  aws eks delete-cluster --name "eks-multi-az-cluster-$ENVIRONMENT" --region "$AWS_REGION" >/dev/null 2>&1 || true
+  aws eks wait cluster-deleted --name "eks-multi-az-cluster-$ENVIRONMENT" --region "$AWS_REGION" >/dev/null 2>&1 || true
   
   # Force delete all network resources with retries
   sleep 30  # Wait for resources to detach
@@ -32,7 +32,7 @@ terraform destroy -auto-approve -input=false >/dev/null 2>&1 || {
   aws ec2 describe-addresses --region $AWS_REGION --filters "Name=tag:Project,Values=eks-multi-az-cluster" --query 'Addresses[*].AllocationId' --output text | xargs -n1 aws ec2 release-address --region $AWS_REGION --allocation-id >/dev/null 2>&1 || true
   
   # Force delete security groups (retry multiple times)
-  for i in {1..5}; do
+  for j in {1..5}; do
     aws ec2 describe-security-groups --region $AWS_REGION --filters "Name=tag:Project,Values=eks-multi-az-cluster" --query 'SecurityGroups[?GroupName!=`default`].GroupId' --output text | xargs -n1 aws ec2 delete-security-group --region $AWS_REGION --group-id >/dev/null 2>&1 || true
     sleep 10
   done
@@ -56,7 +56,7 @@ terraform destroy -auto-approve -input=false >/dev/null 2>&1 || {
     
     # Force delete VPC (retry multiple times)
     for i in {1..10}; do
-      aws ec2 delete-vpc --region $AWS_REGION --vpc-id $vpc >/dev/null 2>&1 && break || sleep 15
+      aws ec2 delete-vpc --region "$AWS_REGION" --vpc-id "$vpc" >/dev/null 2>&1 && break || sleep 15
     done
   done
   

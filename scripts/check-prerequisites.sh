@@ -12,7 +12,11 @@ for tool in "${REQUIRED_TOOLS[@]}"; do
     if ! command -v "$tool" >/dev/null 2>&1; then
         MISSING_TOOLS+=("$tool")
     else
-        VERSION=$(command -v "$tool" && $tool --version 2>/dev/null | head -n1 || echo "unknown")
+        if $tool --version >/dev/null 2>&1; then
+            VERSION=$($tool --version 2>/dev/null | head -n1)
+        else
+            VERSION="unknown"
+        fi
         echo "✅ $tool: $VERSION"
     fi
 done
@@ -46,11 +50,22 @@ done
 
 # Check disk space
 echo "💾 Checking disk space..."
-AVAILABLE_SPACE=$(df -h . | awk 'NR==2 {print $4}' | sed 's/G//')
-if [ "${AVAILABLE_SPACE%.*}" -gt 10 ]; then
-    echo "✅ Disk space: ${AVAILABLE_SPACE}G available"
+AVAILABLE_SPACE=$(df -h . | awk 'NR==2 {print $4}')
+SPACE_NUM=$(echo "$AVAILABLE_SPACE" | sed 's/[^0-9.]//g')
+SPACE_UNIT=$(echo "$AVAILABLE_SPACE" | sed 's/[0-9.]//g')
+
+case "$SPACE_UNIT" in
+    "G"|"g") SPACE_GB="$SPACE_NUM" ;;
+    "T"|"t") SPACE_GB=$((SPACE_NUM * 1024)) ;;
+    "M"|"m") SPACE_GB=$((SPACE_NUM / 1024)) ;;
+    "K"|"k") SPACE_GB=$((SPACE_NUM / 1024 / 1024)) ;;
+    *) SPACE_GB=0 ;;
+esac
+
+if [ "${SPACE_GB%.*}" -gt 10 ]; then
+    echo "✅ Disk space: ${AVAILABLE_SPACE} available"
 else
-    echo "⚠️ Low disk space: ${AVAILABLE_SPACE}G (recommend 10G+)"
+    echo "⚠️ Low disk space: ${AVAILABLE_SPACE} (recommend 10G+)"
 fi
 
 echo "✅ Prerequisites check completed successfully!"

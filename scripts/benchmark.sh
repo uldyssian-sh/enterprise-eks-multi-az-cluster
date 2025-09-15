@@ -12,7 +12,11 @@ kubectl top nodes 2>/dev/null || echo "Metrics server not available"
 echo "📦 Pod Density:"
 TOTAL_PODS=$(kubectl get pods -A --no-headers | wc -l)
 TOTAL_NODES=$(kubectl get nodes --no-headers | wc -l)
-echo "Pods per node: $((TOTAL_PODS / TOTAL_NODES))"
+if [ "$TOTAL_NODES" -gt 0 ]; then
+    echo "Pods per node: $((TOTAL_PODS / TOTAL_NODES))"
+else
+    echo "No nodes found"
+fi
 
 # API server latency
 echo "🔌 API Server Latency:"

@@ -13,7 +13,7 @@ resource "aws_backup_plan" "cross_region" {
     schedule          = "cron(0 3 * * ? *)"
 
     copy_action {
-      destination_vault_arn = "arn:aws:backup:us-east-1:${data.aws_caller_identity.current.account_id}:backup-vault:${var.cluster_name}-dr-vault"
+      destination_vault_arn = "arn:aws:backup:${var.dr_region}:${data.aws_caller_identity.current.account_id}:backup-vault:${var.cluster_name}-dr-vault"
     }
 
     lifecycle {

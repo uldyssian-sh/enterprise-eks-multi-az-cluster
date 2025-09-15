@@ -16,6 +16,12 @@ variable "kms_key_arn" {
   }
 }
 
+variable "dr_region" {
+  description = "Disaster recovery region"
+  type        = string
+  default     = "us-east-1"
+}
+
 variable "tags" {
   description = "Resource tags"
   type        = map(string)

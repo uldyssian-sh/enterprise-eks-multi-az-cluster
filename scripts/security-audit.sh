@@ -15,16 +15,26 @@ echo "✅ Anonymous access restrictions verified"
 
 # Check pod security contexts
 echo "🔐 Checking pod security contexts..."
-INSECURE_PODS=$(kubectl get pods -A -o jsonpath='{range .items[*]}{.spec.securityContext.runAsRoot}{"\n"}{end}' 2>/dev/null | grep -c "true" || echo "0")
+if kubectl get pods -A >/dev/null 2>&1; then
+    INSECURE_PODS=$(kubectl get pods -A -o jsonpath='{range .items[*]}{.spec.securityContext.runAsRoot}{"\n"}{end}' 2>/dev/null | grep -c "true" 2>/dev/null || echo "0")
+else
+    echo "❌ Failed to access pods"
+    exit 1
+fi
 echo "📊 Pods running as root: $INSECURE_PODS"
 
 # Check network policies
 echo "🌐 Checking network policies..."
-NAMESPACES_WITHOUT_NETPOL=$(kubectl get namespaces -o json | jq -r '.items[] | select(.metadata.name != "kube-system" and .metadata.name != "kube-public") | .metadata.name' | while read ns; do
-    if ! kubectl get networkpolicy -n "$ns" >/dev/null 2>&1; then
-        echo "$ns"
-    fi
-done | wc -l)
+if kubectl get namespaces >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+    NAMESPACES_WITHOUT_NETPOL=$(kubectl get namespaces -o json | jq -r '.items[] | select(.metadata.name != "kube-system" and .metadata.name != "kube-public") | .metadata.name' | while read -r ns; do
+        if ! kubectl get networkpolicy -n "$ns" >/dev/null 2>&1; then
+            echo "$ns"
+        fi
+    done | wc -l)
+else
+    echo "❌ kubectl or jq not available"
+    exit 1
+fi
 echo "📊 Namespaces without network policies: $NAMESPACES_WITHOUT_NETPOL"
 
 # Check secrets encryption

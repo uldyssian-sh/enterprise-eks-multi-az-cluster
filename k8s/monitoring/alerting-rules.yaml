@@ -18,7 +18,7 @@ data:
           description: "Node {{ $labels.instance }} has been down for more than 5 minutes"
       
       - alert: PodCrashLooping
-        expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+        expr: rate(kube_pod_container_status_restarts_total[15m]) > 0.1
         for: 5m
         labels:
           severity: warning
@@ -47,13 +47,13 @@ data:
     - name: security-alerts
       rules:
       - alert: SecurityViolation
-        expr: increase(falco_events_total[5m]) > 0
+        expr: increase(falco_events_total[5m])
         for: 1m
         labels:
           severity: critical
         annotations:
           summary: "Security violation detected"
-          description: "Falco detected {{ $value }} security events in the last 5 minutes"
+          description: "Falco detected security events in the last 5 minutes"
       
       - alert: UnauthorizedAPIAccess
         expr: increase(apiserver_audit_total{verb="create",objectRef_resource="pods",user_username!~"system:.*"}[5m]) > 10

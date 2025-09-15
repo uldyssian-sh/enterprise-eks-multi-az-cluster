@@ -24,6 +24,11 @@ spec:
             drop:
             - ALL
           readOnlyRootFilesystem: true
+        volumeMounts:
+        - name: cache-volume
+          mountPath: /var/cache/nginx
+        - name: run-volume
+          mountPath: /var/run
         ports:
         - containerPort: 80
         resources:
@@ -33,6 +38,11 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
+      volumes:
+      - name: cache-volume
+        emptyDir: {}
+      - name: run-volume
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
