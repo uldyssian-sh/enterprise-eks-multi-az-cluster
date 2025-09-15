@@ -20,7 +20,7 @@ To protect the main branch, configure these settings in GitHub:
 
 ### Required Status Checks
 - ✅ `Security Scan`
-- ✅ `Terraform Validation`  
+- ✅ `Terraform Validation`
 - ✅ `Kubernetes Validation`
 - ✅ `pre-commit` (if using pre-commit.ci)
 

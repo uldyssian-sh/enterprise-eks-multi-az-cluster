@@ -33,7 +33,7 @@
 # Development (15 min)
 ./scripts/fully-automated-deploy.sh dev
 
-# Production (20 min) 
+# Production (20 min)
 ./scripts/fully-automated-deploy.sh prod
 ```
 

@@ -4,7 +4,7 @@
 
 ### Prerequisites Check
 - ✅ Terraform installed
-- ✅ kubectl installed  
+- ✅ kubectl installed
 - ✅ AWS CLI configured
 - ✅ Valid AWS credentials
 

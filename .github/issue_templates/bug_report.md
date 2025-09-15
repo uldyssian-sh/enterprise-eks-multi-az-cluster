@@ -10,9 +10,9 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 ## Environment
-- **Kubernetes Version**: 
-- **Terraform Version**: 
-- **AWS Region**: 
+- **Kubernetes Version**:
+- **Terraform Version**:
+- **AWS Region**:
 - **Environment**: [dev/staging/prod]
 
 ## Steps to Reproduce

@@ -25,7 +25,7 @@ EOF
 ```bash
 # Create missing automation scripts
 ./scripts/check-prerequisites.sh
-./scripts/security-audit.sh  
+./scripts/security-audit.sh
 ./scripts/cost-report.sh
 ./scripts/performance-report.sh
 ./scripts/update-cluster.sh

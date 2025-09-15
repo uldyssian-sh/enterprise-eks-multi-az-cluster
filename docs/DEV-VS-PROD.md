@@ -13,7 +13,7 @@
 ./scripts/deploy-all-enterprise.sh dev
 ```
 
-## 🏭 Production Environment  
+## 🏭 Production Environment
 **Resources (2x Dev):**
 - EKS nodes: 6 (m5.large + m5a.large)
 - Spot instances: 2-20
