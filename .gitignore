@@ -91,3 +91,14 @@ requirements.lock
 local/
 dev-override.tf
 dev-override.tfvars
+# Performance optimization
+*.log
+*.tmp
+*.cache
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+node_modules/
+.vscode/settings.json
+.idea/
