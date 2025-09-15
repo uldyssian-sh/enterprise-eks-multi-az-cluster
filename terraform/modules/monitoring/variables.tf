@@ -18,9 +18,10 @@ variable "log_retention_days" {
 variable "kms_key_arn" {
   description = "KMS key ARN for encryption"
   type        = string
+  default     = null
   validation {
-    condition     = can(regex("^arn:aws:kms:[a-z0-9-]+:[0-9]{12}:key/[a-fA-F0-9-]+$", var.kms_key_arn))
-    error_message = "KMS key ARN must be a valid AWS KMS key ARN format."
+    condition     = var.kms_key_arn == null || can(regex("^arn:aws:kms:[a-z0-9-]+:[0-9]{12}:key/[a-fA-F0-9-]+$", var.kms_key_arn))
+    error_message = "KMS key ARN must be a valid AWS KMS key ARN format or null."
   }
 }
 
