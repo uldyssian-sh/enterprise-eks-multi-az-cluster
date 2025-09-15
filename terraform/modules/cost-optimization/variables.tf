@@ -36,6 +36,16 @@ variable "spot_min_size" {
   }
 }
 
+variable "max_unavailable_percentage" {
+  description = "Maximum percentage of nodes unavailable during updates"
+  type        = number
+  default     = 25
+  validation {
+    condition     = var.max_unavailable_percentage >= 1 && var.max_unavailable_percentage <= 100
+    error_message = "Max unavailable percentage must be between 1 and 100."
+  }
+}
+
 variable "tags" {
   description = "Resource tags"
   type        = map(string)

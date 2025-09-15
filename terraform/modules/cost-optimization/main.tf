@@ -13,7 +13,7 @@ resource "aws_eks_node_group" "spot" {
   }
 
   update_config {
-    max_unavailable_percentage = 50
+    max_unavailable_percentage = var.max_unavailable_percentage
   }
 
   tags = var.tags

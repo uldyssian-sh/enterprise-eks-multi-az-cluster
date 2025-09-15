@@ -28,10 +28,7 @@ output "node_group_role_arn" {
   value       = try(aws_iam_role.node_group.arn, null)
 }
 
-output "cluster_primary_security_group_id" {
-  description = "The cluster primary security group ID"
-  value       = try(aws_eks_cluster.main.vpc_config[0].cluster_security_group_id, null)
-}
+
 
 output "cluster_version" {
   description = "The Kubernetes version for the EKS cluster"

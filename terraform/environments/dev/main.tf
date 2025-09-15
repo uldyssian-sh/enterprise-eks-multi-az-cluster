@@ -23,12 +23,6 @@ provider "aws" {
 
 locals {
   cluster_name = "eks-multi-az-cluster-dev"
-  
-  common_tags = {
-    Environment = "dev"
-    Project     = "eks-multi-az-cluster"
-    ManagedBy   = "terraform"
-  }
 }
 
 module "vpc" {
@@ -39,8 +33,6 @@ module "vpc" {
   
   private_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   public_subnet_cidrs  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
-  
-  tags = local.common_tags
 }
 
 module "security" {
@@ -49,15 +41,13 @@ module "security" {
   cluster_name         = local.cluster_name
   vpc_id              = module.vpc.vpc_id
   allowed_cidr_blocks = ["10.0.0.0/16"]
-  
-  tags = local.common_tags
 }
 
 module "eks" {
   source = "../../modules/eks"
   
   cluster_name               = local.cluster_name
-  kubernetes_version         = "1.28"
+  kubernetes_version         = "1.30"
   private_subnet_ids         = module.vpc.private_subnet_ids
   public_subnet_ids          = module.vpc.public_subnet_ids
   cluster_security_group_id  = module.security.cluster_security_group_id
@@ -68,8 +58,6 @@ module "eks" {
   node_max_size       = 6
   node_min_size       = 1
   node_disk_size      = 20
-  
-  tags = local.common_tags
 }
 
 module "monitoring" {
@@ -79,7 +67,6 @@ module "monitoring" {
   aws_region         = var.aws_region
   log_retention_days = 30
   kms_key_arn        = module.security.kms_key_arn
-  tags               = local.common_tags
 }
 
 module "backup" {
@@ -87,7 +74,6 @@ module "backup" {
 
   cluster_name = local.cluster_name
   kms_key_arn  = module.security.kms_key_arn
-  tags         = local.common_tags
 }
 
 module "secrets" {
@@ -95,7 +81,6 @@ module "secrets" {
 
   cluster_name = local.cluster_name
   kms_key_arn  = module.security.kms_key_arn
-  tags         = local.common_tags
 }
 
 module "logging" {
@@ -104,7 +89,6 @@ module "logging" {
   cluster_name       = local.cluster_name
   log_retention_days = 30
   kms_key_arn        = module.security.kms_key_arn
-  tags               = local.common_tags
 }
 
 module "disaster_recovery" {
@@ -112,7 +96,6 @@ module "disaster_recovery" {
 
   cluster_name = local.cluster_name
   kms_key_arn  = module.security.kms_key_arn
-  tags         = local.common_tags
 }
 
 module "cost_optimization" {
@@ -124,5 +107,4 @@ module "cost_optimization" {
   spot_desired_size = 1
   spot_max_size     = 5
   spot_min_size     = 0
-  tags              = local.common_tags
 }

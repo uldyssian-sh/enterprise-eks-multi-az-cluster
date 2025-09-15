@@ -86,7 +86,7 @@ resource "aws_cloudwatch_metric_alarm" "pod_restart_high" {
 
 resource "aws_cloudwatch_log_metric_filter" "error_count" {
   name           = "${var.cluster_name}-error-count"
-  log_group_name = aws_cloudwatch_log_group.eks.name
+  log_group_name = aws_cloudwatch_log_group.eks["application"].name
   pattern        = "ERROR"
 
   metric_transformation {
