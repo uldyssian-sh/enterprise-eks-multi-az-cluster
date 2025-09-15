@@ -18,6 +18,11 @@ spec:
       labels:
         app: istiod
     spec:
+      serviceAccountName: istiod
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: discovery
         image: docker.io/istio/pilot:1.19.0
@@ -29,5 +34,7 @@ spec:
             drop:
             - ALL
           readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
         ports:
         - containerPort: 15010
