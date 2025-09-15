@@ -19,7 +19,7 @@ spec:
         app: istiod
     spec:
       serviceAccountName: istiod
-      automountServiceAccountToken: false
+      automountServiceAccountToken: true
       securityContext:
         seccompProfile:
           type: RuntimeDefault

@@ -33,6 +33,13 @@ spec:
           readOnlyRootFilesystem: true
         ports:
         - containerPort: 20001
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
         env:
         - name: ACTIVE_NAMESPACE
           value: istio-system
@@ -76,6 +83,13 @@ spec:
             - ALL
         ports:
         - containerPort: 16686
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
         env:
         - name: COLLECTOR_OTLP_ENABLED
           value: "true"

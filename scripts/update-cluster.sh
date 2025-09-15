@@ -10,6 +10,10 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Update infrastructure
 echo "🏗️ Updating infrastructure..."
+if [ ! -d "$PROJECT_ROOT/terraform/environments/$ENV" ]; then
+  echo "❌ Environment directory not found: $PROJECT_ROOT/terraform/environments/$ENV"
+  exit 1
+fi
 cd "$PROJECT_ROOT/terraform/environments/$ENV"
 terraform plan -out=update-plan
 terraform apply -auto-approve update-plan

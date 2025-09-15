@@ -19,7 +19,10 @@ spec:
   policyTypes:
   - Egress
   egress:
-  - to: []
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
     ports:
     - protocol: UDP
       port: 53

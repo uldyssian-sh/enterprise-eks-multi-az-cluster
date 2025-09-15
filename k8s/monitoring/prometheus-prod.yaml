@@ -38,6 +38,7 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /etc/prometheus
+          readOnly: true
         readinessProbe:
           httpGet:
             path: /-/ready

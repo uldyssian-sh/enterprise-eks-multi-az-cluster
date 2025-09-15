@@ -23,7 +23,7 @@ jobs:
         scan-type: 'fs'
         scan-ref: '.'
         format: 'table'
-        exit-code: '0'
+        exit-code: '1'
         
     - name: Run Checkov security scan
       uses: bridgecrewio/checkov-action@v12

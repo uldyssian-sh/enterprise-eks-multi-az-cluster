@@ -67,7 +67,7 @@ resource "aws_eks_cluster" "main" {
     subnet_ids              = concat(var.private_subnet_ids, var.public_subnet_ids)
     endpoint_private_access = true
     endpoint_public_access  = true
-    public_access_cidrs     = length(var.public_access_cidrs) > 0 ? var.public_access_cidrs : ["10.0.0.0/8"]
+    public_access_cidrs     = length(var.public_access_cidrs) > 0 ? var.public_access_cidrs : ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
     security_group_ids      = [var.cluster_security_group_id]
   }
 

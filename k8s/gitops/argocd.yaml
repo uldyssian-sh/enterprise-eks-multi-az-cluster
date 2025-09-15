@@ -31,6 +31,18 @@ spec:
           readOnlyRootFilesystem: true
         ports:
         - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /api/v1/status
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/v1/status
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           requests:
             memory: "256Mi"

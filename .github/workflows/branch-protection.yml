@@ -19,8 +19,10 @@ jobs:
         echo "📋 All required checks must pass before merge"
         
     - name: Validate PR requirements
+      env:
+        BASE_REF: ${{ github.event.pull_request.base.ref }}
       run: |
-        if [ "${{ github.event.pull_request.base.ref }}" = "main" ]; then
+        if [ "$BASE_REF" = "main" ]; then
           echo "✅ PR targets main branch - protection active"
         else
           echo "ℹ️ PR does not target main branch"
