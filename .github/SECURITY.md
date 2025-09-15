@@ -4,37 +4,46 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.x.x   | :white_check_mark: |
+| Latest  | :white_check_mark: |
+| < Latest| :x:                |
 
 ## Reporting a Vulnerability
 
-We take security vulnerabilities seriously. If you discover a security vulnerability, please report it by:
+If you discover a security vulnerability, please report it responsibly:
 
-1. **Email**: Send details to security@company.com
-2. **GitHub**: Create a private security advisory
-3. **Response Time**: We aim to respond within 24 hours
+### How to Report
+- **Email**: Create an issue with label `security`
+- **Response Time**: We aim to respond within 48 hours
+- **Updates**: You will receive updates every 7 days
 
-## Security Standards
+### What to Include
+- Description of the vulnerability
+- Steps to reproduce
+- Potential impact
+- Suggested fix (if available)
 
-This project implements:
+### Our Commitment
+- We will acknowledge receipt within 48 hours
+- We will provide a detailed response within 7 days
+- We will work with you to understand and resolve the issue
+- We will credit you in our security advisories (if desired)
 
-- **SOC 2 Type II** compliance
-- **PCI DSS Level 1** standards
-- **GDPR** data protection
-- **ISO 27001** security management
-- **FedRAMP Moderate** government standards
-- **CIS Kubernetes** benchmarks
+## Security Best Practices
 
-## Security Features
+### For Contributors
+- Keep dependencies updated
+- Follow secure coding practices
+- Run security scans before submitting PRs
+- Never commit secrets or credentials
 
-- Zero hardcoded secrets
-- Encrypted data at rest and in transit
-- Network segmentation with zero-trust policies
-- Runtime security monitoring
-- Automated vulnerability scanning
-- Multi-factor authentication
-- Audit logging and monitoring
+### For Users
+- Always use the latest version
+- Report suspicious behavior
+- Follow installation instructions carefully
+- Keep your environment updated
 
-## Responsible Disclosure
+## Contact
 
-Please do not publicly disclose vulnerabilities until we have had a chance to address them.
+For security-related questions: Create an issue with `security` label.
+
+Thank you for helping keep our project secure!
