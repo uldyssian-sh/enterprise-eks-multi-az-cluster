@@ -81,6 +81,7 @@ spec:
           capabilities:
             drop:
             - ALL
+          readOnlyRootFilesystem: true
         ports:
         - containerPort: 16686
         resources:

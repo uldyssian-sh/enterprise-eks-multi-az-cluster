@@ -67,7 +67,7 @@ resource "aws_eks_cluster" "main" {
     subnet_ids              = concat(var.private_subnet_ids, var.public_subnet_ids)
     endpoint_private_access = true
     endpoint_public_access  = true
-    public_access_cidrs     = length(var.public_access_cidrs) > 0 ? var.public_access_cidrs : ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
+    public_access_cidrs     = var.public_access_cidrs
     security_group_ids      = [var.cluster_security_group_id]
   }
 
@@ -104,8 +104,8 @@ resource "aws_eks_node_group" "main" {
     max_unavailable = 1
   }
 
-  ami_type       = "AL2_x86_64"
-  capacity_type  = "ON_DEMAND"
+  ami_type       = var.node_ami_type
+  capacity_type  = var.node_capacity_type
   disk_size      = var.node_disk_size
 
   depends_on = [

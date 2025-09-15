@@ -29,8 +29,9 @@ fi
 # Check AWS credentials
 echo "🔐 Checking AWS credentials..."
 if aws sts get-caller-identity >/dev/null 2>&1; then
-    ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
-    USER=$(aws sts get-caller-identity --query Arn --output text)
+    CALLER_IDENTITY=$(aws sts get-caller-identity)
+    ACCOUNT=$(echo "$CALLER_IDENTITY" | jq -r '.Account')
+    USER=$(echo "$CALLER_IDENTITY" | jq -r '.Arn')
     echo "✅ AWS credentials valid: $USER (Account: $ACCOUNT)"
 else
     echo "❌ AWS credentials not configured"
@@ -41,7 +42,7 @@ fi
 echo "🔑 Checking AWS permissions..."
 REQUIRED_PERMISSIONS=("eks:CreateCluster" "ec2:CreateVpc" "iam:CreateRole")
 for perm in "${REQUIRED_PERMISSIONS[@]}"; do
-    if aws iam simulate-principal-policy --policy-source-arn "$(aws sts get-caller-identity --query Arn --output text)" --action-names "$perm" --resource-arns "*" --query 'EvaluationResults[0].EvalDecision' --output text 2>/dev/null | grep -q "allowed"; then
+    if aws iam simulate-principal-policy --policy-source-arn "$USER" --action-names "$perm" --resource-arns "*" --query 'EvaluationResults[0].EvalDecision' --output text 2>/dev/null | grep -q "allowed"; then
         echo "✅ $perm: allowed"
     else
         echo "⚠️ $perm: may be restricted"
@@ -51,8 +52,8 @@ done
 # Check disk space
 echo "💾 Checking disk space..."
 AVAILABLE_SPACE=$(df -h . | awk 'NR==2 {print $4}')
-SPACE_NUM=$(echo "$AVAILABLE_SPACE" | sed 's/[^0-9.]//g')
-SPACE_UNIT=$(echo "$AVAILABLE_SPACE" | sed 's/[0-9.]//g')
+SPACE_NUM=${AVAILABLE_SPACE//[^0-9.]/}
+SPACE_UNIT=${AVAILABLE_SPACE//[0-9.]/}
 
 case "$SPACE_UNIT" in
     "G"|"g") SPACE_GB="$SPACE_NUM" ;;

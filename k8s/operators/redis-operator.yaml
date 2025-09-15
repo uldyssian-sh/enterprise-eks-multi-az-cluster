@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: redis-operator
-        image: spotahome/redis-operator:v1.2.4
+        image: spotahome/redis-operator:v1.3.0
         securityContext:
           runAsNonRoot: true
           runAsUser: 1000

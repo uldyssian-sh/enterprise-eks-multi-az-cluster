@@ -30,7 +30,7 @@ jobs:
       with:
         directory: .
         framework: terraform,kubernetes
-        soft_fail: true
+        soft_fail: false
         output_format: cli
         compact: true
         quiet: true

@@ -32,7 +32,10 @@ variable "kms_key_arn" {
 variable "public_access_cidrs" {
   description = "List of CIDR blocks for public access"
   type        = list(string)
-  default     = ["0.0.0.0/0"]
+  validation {
+    condition     = length(var.public_access_cidrs) > 0
+    error_message = "At least one CIDR block must be specified for public access."
+  }
 }
 
 variable "node_instance_types" {
@@ -63,6 +66,18 @@ variable "node_disk_size" {
   description = "Disk size for nodes in GB"
   type        = number
   default     = 20
+}
+
+variable "node_ami_type" {
+  description = "AMI type for the node group"
+  type        = string
+  default     = "AL2_x86_64"
+}
+
+variable "node_capacity_type" {
+  description = "Capacity type for the node group"
+  type        = string
+  default     = "ON_DEMAND"
 }
 
 variable "tags" {
