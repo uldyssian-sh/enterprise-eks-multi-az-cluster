@@ -31,7 +31,7 @@ jobs:
         soft_fail: true
         
     - name: Run TruffleHog secrets scan
-      uses: trufflesecurity/trufflehog@v3.63.2
+      uses: trufflesecurity/trufflehog@v3.90.6
       with:
         path: ./
         base: ${{ github.event.repository.default_branch }}
