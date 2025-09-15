@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: postgres-operator
-        image: registry.opensource.zalan.do/acid/postgres-operator:v1.10.1
+        image: registry.opensource.zalan.do/acid/postgres-operator:v1.12.2
         resources:
           requests:
             memory: "256Mi"

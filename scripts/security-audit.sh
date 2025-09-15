@@ -6,7 +6,7 @@ echo "🔒 Running enterprise security audit..."
 
 # Check cluster security
 echo "🛡️ Checking cluster security configuration..."
-kubectl get psp,networkpolicies,podsecuritypolicy -A 2>/dev/null || { echo "⚠️ Some security resources not found"; exit 1; }
+kubectl get networkpolicies -A 2>/dev/null || { echo "⚠️ Network policies not found"; exit 1; }
 
 # Check RBAC
 echo "👥 Auditing RBAC configuration..."

@@ -16,7 +16,7 @@ export let options = {
 };
 
 export default function () {
-  let response = http.get('http://localhost:3000/api/health');
+  let response = http.get(__ENV.TARGET_URL || 'http://localhost:3000/api/health');
   check(response, {
     'status is 200': (r) => r.status === 200,
     'response time < 500ms': (r) => r.timings.duration < 500,

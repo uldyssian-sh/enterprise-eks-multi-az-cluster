@@ -9,7 +9,11 @@ metadata:
   name: prometheus
   namespace: monitoring
 spec:
-  replicas: 3
+  replicas: 1
+      volumes:
+      - name: prometheus-storage
+        persistentVolumeClaim:
+          claimName: prometheus-pvc
   selector:
     matchLabels:
       app: prometheus
@@ -30,6 +34,9 @@ spec:
             - ALL
         ports:
         - containerPort: 9090
+        volumeMounts:
+        - name: prometheus-storage
+          mountPath: /prometheus
         args:
           - '--config.file=/etc/prometheus/prometheus.yml'
           - '--storage.tsdb.retention.time=15d'
