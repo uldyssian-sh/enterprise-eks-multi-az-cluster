@@ -7,7 +7,14 @@
 
 ## 🎯 Overview
 
-Enterprise-grade enterprise eks multi az cluster solution with professional automation, security, and scalability features.
+Professional enterprise eks multi az cluster solution with enterprise-grade automation and security features.
+
+## 📊 Repository Stats
+
+- **Files:**      148
+- **Technologies:** Terraform YAML Bash
+- **Type:** Infrastructure Automation
+- **Status:** Production Ready
 
 ## ✨ Features
 
@@ -23,11 +30,29 @@ Enterprise-grade enterprise eks multi az cluster solution with professional auto
 ## 🚀 Quick Start
 
 ```bash
+# Clone repository
 git clone https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster.git
 cd enterprise-eks-multi-az-cluster
+
+# Setup environment
 chmod +x setup.sh
 ./setup.sh
 ```
+
+
+## 🏗️ Terraform Usage
+
+```bash
+# Initialize Terraform
+terraform init
+
+# Plan deployment
+terraform plan
+
+# Apply configuration
+terraform apply
+```
+
 
 ## 📚 Documentation
 
@@ -47,8 +72,8 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 
 ## 🆘 Support
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/issues)
-- 📖 **Documentation**: [Wiki](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/uldyssian-sh/REPO_NAME/issues)
+- 📖 **Documentation**: [Wiki](https://github.com/uldyssian-sh/REPO_NAME/wiki)
 
 ---
 
