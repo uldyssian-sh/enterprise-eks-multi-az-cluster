@@ -1,80 +1,48 @@
-# enterprise eks multi az cluster
+# Enterprise EKS Multi-AZ Cluster
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub issues](https://img.shields.io/github/issues/uldyssian-sh/enterprise-eks-multi-az-cluster)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/issues)
-[![GitHub stars](https://img.shields.io/github/stars/uldyssian-sh/enterprise-eks-multi-az-cluster)](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/stargazers)
-[![Security](https://img.shields.io/badge/Security-Enterprise-blue.svg)](SECURITY.md)
+<div align="center">
+  <img src="https://d2908q01vomqb2.cloudfront.net/fe2ef495a1152561572949784c16bf23abb28057/2019/01/23/eks-logo-1.png" alt="Enterprise EKS" width="400"/>
+  
+  [![Terraform](https://img.shields.io/badge/Terraform-1.5+-623CE4.svg)](https://www.terraform.io/)
+  [![AWS EKS](https://img.shields.io/badge/AWS-EKS-FF9900.svg)](https://aws.amazon.com/eks/)
+  [![Multi-AZ](https://img.shields.io/badge/Multi--AZ-High%20Availability-green.svg)](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/)
+</div>
 
-## 🎯 Overview
+## 🏢 Overview
 
-Professional enterprise eks multi az cluster solution with enterprise-grade automation and security features.
+Enterprise-grade, highly available EKS cluster spanning multiple Availability Zones. Designed for production workloads with advanced security, monitoring, and disaster recovery capabilities.
 
-## 📊 Repository Stats
-
-- **Files:**      148
-- **Technologies:** Terraform YAML Bash
-- **Type:** Infrastructure Automation
-- **Status:** Production Ready
-
-## ✨ Features
-
-- 🏗️ **Enterprise Architecture** - Production-ready infrastructure
-- 🔒 **Zero-Trust Security** - Comprehensive security controls
-- 🚀 **CI/CD Automation** - Automated deployment pipelines
-- 📊 **Monitoring & Observability** - Complete visibility
-- 🤖 **AI Integration** - GitHub Copilot & Amazon Q
-- 🔄 **Self-Healing** - Automatic error recovery
-- 📈 **Performance Optimized** - High-performance configurations
-- 🛡️ **Compliance Ready** - SOC2, GDPR, HIPAA standards
-
-## 🚀 Quick Start
+## 🚀 Quick Deployment
 
 ```bash
 # Clone repository
 git clone https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster.git
 cd enterprise-eks-multi-az-cluster
 
-# Setup environment
-chmod +x setup.sh
-./setup.sh
-```
+# Configure variables
+cp terraform.tfvars.example terraform.tfvars
 
-
-## 🏗️ Terraform Usage
-
-```bash
-# Initialize Terraform
+# Deploy infrastructure
 terraform init
-
-# Plan deployment
-terraform plan
-
-# Apply configuration
 terraform apply
+
+# Update kubeconfig
+aws eks update-kubeconfig --region us-west-2 --name enterprise-eks-cluster
 ```
 
+## ⚡ Features
+
+- **Multi-AZ Deployment**: Nodes across 3 availability zones
+- **Auto Scaling**: Cluster and pod autoscaling
+- **Security**: Private subnets, IAM roles, network policies
+- **Monitoring**: CloudWatch, Prometheus, Grafana
 
 ## 📚 Documentation
 
-- [Installation Guide](docs/installation.md)
-- [Configuration Reference](docs/configuration.md)
-- [API Documentation](docs/api.md)
-- [Troubleshooting](docs/troubleshooting.md)
-- [Security Policy](SECURITY.md)
-
-## 🤝 Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+- [Architecture Guide](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Architecture)
+- [Deployment Guide](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Deployment)
+- [Security Hardening](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Security)
 
 ## 📄 License
 
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
-
-## 🆘 Support
-
-- 🐛 **Issues**: [GitHub Issues](https://github.com/uldyssian-sh/REPO_NAME/issues)
-- 📖 **Documentation**: [Wiki](https://github.com/uldyssian-sh/REPO_NAME/wiki)
-
----
-
-⭐ **Star this repository if you find it helpful!**
+MIT License - see [LICENSE](LICENSE) file for details.
