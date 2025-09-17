@@ -1,7 +1,8 @@
 # Enterprise EKS Multi-AZ Cluster
 
 <div align="center">
-  <img src="https://d2908q01vomqb2.cloudfront.net/fe2ef495a1152561572949784c16bf23abb28057/2019/01/23/eks-logo-1.png" alt="Enterprise EKS" width="400"/>
+
+
   
   [![Terraform](https://img.shields.io/badge/Terraform-1.5+-623CE4.svg)](https://www.terraform.io/)
   [![AWS EKS](https://img.shields.io/badge/AWS-EKS-FF9900.svg)](https://aws.amazon.com/eks/)
