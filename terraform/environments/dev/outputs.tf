@@ -20,10 +20,10 @@ output "vpc_id" {
 
 output "private_subnet_ids" {
   description = "IDs of the private subnets"
-  value       = module.vpc.private_subnet_ids
+  value       = try(module.vpc.private_subnets, [])
 }
 
 output "configure_kubectl" {
   description = "Configure kubectl: make sure you're logged in with the correct AWS profile and run the following command to update your kubeconfig"
-  value       = "aws eks --region ${var.aws_region} update-kubeconfig --name ${module.eks.cluster_id}"
+  value       = "aws eks --region ${var.region} update-kubeconfig --name ${try(module.eks.cluster_id, var.cluster_name)}"
 }

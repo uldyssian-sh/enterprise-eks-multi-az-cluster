@@ -10,6 +10,18 @@ variable "region" {
   default     = "us-west-2"
 }
 
+variable "aws_region" {
+  description = "AWS region (alias)"
+  type        = string
+  default     = "us-west-2"
+}
+
+variable "kms_key_arn" {
+  description = "KMS key ARN for encryption"
+  type        = string
+  default     = ""
+}
+
 variable "environment" {
   description = "Environment name"
   type        = string
