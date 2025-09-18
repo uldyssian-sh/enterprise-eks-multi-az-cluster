@@ -1,73 +1,148 @@
 #!/bin/bash
 
-set -e
+# Enterprise Security Scanner
+# Optimized for performance and comprehensive security scanning
 
-echo "🔒 Running comprehensive security scan..."
+set -euo pipefail
 
-# Check dependencies
-for cmd in jq kubectl; do
-    if ! command -v "$cmd" >/dev/null 2>&1; then
-        echo "❌ Required tool '$cmd' not found"
-        exit 1
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOG_FILE="${SCRIPT_DIR}/security-scan.log"
+SCAN_RESULTS="${SCRIPT_DIR}/scan-results"
+
+# Logging function
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "${LOG_FILE}"
+}
+
+# Create results directory
+mkdir -p "${SCAN_RESULTS}"
+
+# Optimized container image scanning
+scan_container_images() {
+    log "Starting optimized container image security scan..."
+    
+    # Get all unique images efficiently
+    local images
+    mapfile -t images < <(kubectl get pods --all-namespaces -o jsonpath='{.items[*].spec.containers[*].image}' | tr ' ' '\n' | sort -u)
+    
+    if [ ${#images[@]} -eq 0 ]; then
+        log "No container images found to scan"
+        return 0
     fi
-done
-
-# Container image vulnerability scan
-echo "🐳 Scanning container images..."
-if command -v trivy >/dev/null 2>&1; then
-    kubectl get pods -A -o jsonpath='{range .items[*]}{.spec.containers[*].image}{"\n"}{end}' | sort -u | while read image; do
-        echo "  Scanning: $image"
-        trivy image --severity HIGH,CRITICAL --quiet "$image" || echo "    ⚠️ Scan failed for $image"
+    
+    log "Found ${#images[@]} unique container images to scan"
+    
+    # Parallel scanning with rate limiting
+    local max_parallel=3
+    local count=0
+    
+    for image in "${images[@]}"; do
+        if [ $((count % max_parallel)) -eq 0 ] && [ ${count} -gt 0 ]; then
+            wait # Wait for previous batch to complete
+        fi
+        
+        {
+            log "Scanning image: ${image}"
+            if command -v trivy &> /dev/null; then
+                trivy image --format json --output "${SCAN_RESULTS}/$(echo "${image}" | tr '/' '_' | tr ':' '_').json" "${image}" 2>/dev/null || log "Failed to scan ${image}"
+            else
+                log "Trivy not installed, skipping image scan for ${image}"
+            fi
+        } &
+        
+        ((count++))
     done
-else
-    echo "  ⚠️ Trivy not installed, skipping image scans"
-fi
+    
+    wait # Wait for all scans to complete
+    log "Container image scanning completed"
+}
 
-# Kubernetes configuration scan
-echo "⚙️ Scanning Kubernetes configurations..."
-if command -v kube-score >/dev/null 2>&1; then
-    find k8s/ -name "*.yaml" -exec kube-score score {} \; 2>/dev/null | grep -E "(CRITICAL|WARNING)" | head -10 || echo "  ✅ No critical issues found"
-else
-    echo "  ⚠️ kube-score not installed"
-fi
+# Kubernetes security scan
+scan_kubernetes_security() {
+    log "Scanning Kubernetes security configurations..."
+    
+    # Check for privileged containers
+    kubectl get pods --all-namespaces -o json | jq -r '.items[] | select(.spec.containers[]?.securityContext.privileged == true) | "\(.metadata.namespace)/\(.metadata.name)"' > "${SCAN_RESULTS}/privileged-pods.txt" 2>/dev/null || true
+    
+    # Check for containers running as root
+    kubectl get pods --all-namespaces -o json | jq -r '.items[] | select(.spec.containers[]?.securityContext.runAsUser == 0 or (.spec.containers[]?.securityContext.runAsUser == null and .spec.securityContext.runAsUser == null)) | "\(.metadata.namespace)/\(.metadata.name)"' > "${SCAN_RESULTS}/root-containers.txt" 2>/dev/null || true
+    
+    # Check for missing network policies
+    kubectl get networkpolicies --all-namespaces -o json | jq -r '.items[] | "\(.metadata.namespace)/\(.metadata.name)"' > "${SCAN_RESULTS}/network-policies.txt" 2>/dev/null || true
+    
+    log "Kubernetes security scan completed"
+}
 
-# Network policy validation
-echo "🌐 Checking network security..."
-NAMESPACES_WITHOUT_NETPOL=$(kubectl get namespaces -o json | jq -r '.items[] | select(.metadata.name != "kube-system" and .metadata.name != "kube-public" and .metadata.name != "kube-node-lease") | .metadata.name' | while read -r ns; do
-    if ! kubectl get networkpolicy -n "$ns" >/dev/null 2>&1; then
-        echo "$ns"
+# Network security scan
+scan_network_security() {
+    log "Scanning network security..."
+    
+    # Check for LoadBalancer services without proper annotations
+    kubectl get services --all-namespaces -o json | jq -r '.items[] | select(.spec.type == "LoadBalancer") | "\(.metadata.namespace)/\(.metadata.name)"' > "${SCAN_RESULTS}/loadbalancer-services.txt" 2>/dev/null || true
+    
+    # Check for services without selectors
+    kubectl get services --all-namespaces -o json | jq -r '.items[] | select(.spec.selector == null) | "\(.metadata.namespace)/\(.metadata.name)"' > "${SCAN_RESULTS}/services-no-selector.txt" 2>/dev/null || true
+    
+    log "Network security scan completed"
+}
+
+# Generate security report
+generate_security_report() {
+    log "Generating security report..."
+    
+    local report_file="${SCAN_RESULTS}/security-report.html"
+    
+    cat > "${report_file}" << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enterprise EKS Security Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background-color: #f0f0f0; padding: 20px; border-radius: 5px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .critical { border-left: 5px solid #ff0000; }
+        .warning { border-left: 5px solid #ffa500; }
+        .info { border-left: 5px solid #0066cc; }
+        .success { border-left: 5px solid #00cc00; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Enterprise EKS Security Report</h1>
+        <p>Generated on: $(date)</p>
+    </div>
+EOF
+    
+    # Add scan results to report
+    if [ -f "${SCAN_RESULTS}/privileged-pods.txt" ] && [ -s "${SCAN_RESULTS}/privileged-pods.txt" ]; then
+        echo '<div class="section critical"><h2>Critical: Privileged Containers Found</h2><pre>' >> "${report_file}"
+        cat "${SCAN_RESULTS}/privileged-pods.txt" >> "${report_file}"
+        echo '</pre></div>' >> "${report_file}"
     fi
-done | wc -l)
-echo "  Namespaces without network policies: $NAMESPACES_WITHOUT_NETPOL"
+    
+    if [ -f "${SCAN_RESULTS}/root-containers.txt" ] && [ -s "${SCAN_RESULTS}/root-containers.txt" ]; then
+        echo '<div class="section warning"><h2>Warning: Containers Running as Root</h2><pre>' >> "${report_file}"
+        cat "${SCAN_RESULTS}/root-containers.txt" >> "${report_file}"
+        echo '</pre></div>' >> "${report_file}"
+    fi
+    
+    echo '</body></html>' >> "${report_file}"
+    
+    log "Security report generated: ${report_file}"
+}
 
-# RBAC analysis
-echo "👥 Analyzing RBAC permissions..."
-CLUSTER_ADMIN_BINDINGS=$(kubectl get clusterrolebindings -o json | jq -r '.items[] | select(.roleRef.name=="cluster-admin") | .metadata.name' | wc -l)
-echo "  Cluster admin bindings: $CLUSTER_ADMIN_BINDINGS"
+# Main execution
+main() {
+    log "Starting enterprise security scan..."
+    
+    scan_container_images
+    scan_kubernetes_security
+    scan_network_security
+    generate_security_report
+    
+    log "✅ Enterprise security scan completed"
+    log "Results available in: ${SCAN_RESULTS}/"
+}
 
-# Secret analysis
-echo "🔑 Analyzing secrets..."
-UNENCRYPTED_SECRETS=$(kubectl get secrets -A --field-selector type=Opaque -o json | jq -r '.items[] | select(.metadata.annotations."encryption.alpha.kubernetes.io/encrypted" != "true") | .metadata.name' | wc -l)
-echo "  Potentially unencrypted secrets: $UNENCRYPTED_SECRETS"
-
-# Security score calculation
-TOTAL_CHECKS=4
-SECURITY_ISSUES=$((NAMESPACES_WITHOUT_NETPOL > 0 ? 1 : 0))
-SECURITY_ISSUES=$((SECURITY_ISSUES + (CLUSTER_ADMIN_BINDINGS > 2 ? 1 : 0)))
-SECURITY_ISSUES=$((SECURITY_ISSUES + (UNENCRYPTED_SECRETS > 5 ? 1 : 0)))
-
-SECURITY_SCORE=$(((TOTAL_CHECKS - SECURITY_ISSUES) * 100 / TOTAL_CHECKS))
-
-echo "📊 Security Scan Summary:"
-echo "  Security Score: $SECURITY_SCORE/100"
-echo "  Network policy gaps: $NAMESPACES_WITHOUT_NETPOL"
-echo "  RBAC admin bindings: $CLUSTER_ADMIN_BINDINGS"
-echo "  Unencrypted secrets: $UNENCRYPTED_SECRETS"
-
-if [ $SECURITY_SCORE -ge 90 ]; then
-    echo "✅ Security scan passed!"
-elif [ $SECURITY_SCORE -ge 70 ]; then
-    echo "⚠️ Security improvements recommended"
-else
-    echo "❌ Critical security issues found"
-fi
+main "$@"

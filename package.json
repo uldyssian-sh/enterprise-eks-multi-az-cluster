@@ -1,26 +1,48 @@
 {
-  "name": "enterprise-eks-multi-az-cluster",
+  "name": "@enterprise/eks-multi-az-cluster",
   "version": "1.0.0",
-  "description": "Enterprise automation and management solution",
+  "description": "Enterprise-grade multi-AZ EKS cluster with advanced security and monitoring",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No tests specified\" && exit 0",
-    "lint": "echo \"No linting configured\" && exit 0",
-    "build": "echo \"No build process\" && exit 0"
+    "test": "jest",
+    "lint": "eslint .",
+    "security-audit": "npm audit --audit-level moderate",
+    "validate": "terraform validate",
+    "plan": "terraform plan",
+    "deploy": "./scripts/deploy-prod-enterprise.sh",
+    "destroy": "./scripts/cleanup.sh"
   },
+  "keywords": [
+    "kubernetes",
+    "eks",
+    "aws",
+    "terraform",
+    "enterprise",
+    "multi-az",
+    "security",
+    "monitoring"
+  ],
+  "author": "Enterprise DevOps Team",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster.git"
+    "url": "https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster.git"
   },
-  "keywords": ["automation", "enterprise", "infrastructure"],
-  "author": "uldyssian-sh",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/issues"
   },
   "homepage": "https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster#readme",
   "devDependencies": {
-    "prettier": "^2.8.0",
-    "eslint": "^8.0.0"
+    "eslint": "^8.45.0",
+    "jest": "^29.6.0",
+    "@types/node": "^20.4.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1400.0",
+    "kubernetes-client": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   }
 }

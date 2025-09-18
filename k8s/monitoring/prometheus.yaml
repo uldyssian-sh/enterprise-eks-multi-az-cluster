@@ -1,97 +1,100 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: monitoring
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus
   namespace: monitoring
+  labels:
+    app: prometheus
+    component: server
 spec:
-  replicas: 1
-      volumes:
-      - name: prometheus-storage
-        persistentVolumeClaim:
-          claimName: prometheus-pvc
+  replicas: 2
   selector:
     matchLabels:
       app: prometheus
+      component: server
   template:
     metadata:
       labels:
         app: prometheus
+        component: server
     spec:
+      serviceAccountName: prometheus
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        fsGroup: 65534
       containers:
       - name: prometheus
-        image: prom/prometheus:v2.47.0
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 65534
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
+        image: prom/prometheus:v2.45.0
         ports:
         - containerPort: 9090
-        volumeMounts:
-        - name: prometheus-storage
-          mountPath: /prometheus
+          name: web
         args:
-          - '--config.file=/etc/prometheus/prometheus.yml'
-          - '--storage.tsdb.retention.time=15d'
-        volumeMounts:
-        - name: config
-          mountPath: /etc/prometheus
-        readinessProbe:
-          httpGet:
-            path: /-/ready
-            port: 9090
-          initialDelaySeconds: 30
+        - "--config.file=/etc/prometheus/prometheus.yml"
+        - "--storage.tsdb.path=/prometheus/"
+        - "--web.console.libraries=/etc/prometheus/console_libraries"
+        - "--web.console.templates=/etc/prometheus/consoles"
+        - "--storage.tsdb.retention.time=30d"
+        - "--web.enable-lifecycle"
+        - "--web.enable-admin-api"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
         livenessProbe:
           httpGet:
             path: /-/healthy
             port: 9090
-          initialDelaySeconds: 60
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-          limits:
-            memory: "1Gi"
-            cpu: "1000m"
+          initialDelaySeconds: 30
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: 9090
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/prometheus/
+        - name: storage-volume
+          mountPath: /prometheus/
       volumes:
-      - name: config
+      - name: config-volume
         configMap:
           name: prometheus-config
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: prometheus-config
-  namespace: monitoring
-data:
-  prometheus.yml: |
-    global:
-      scrape_interval: 15s
-    scrape_configs:
-    - job_name: 'kubernetes-nodes'
-      kubernetes_sd_configs:
-      - role: node
-      scheme: https
-      tls_config:
-        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      - name: storage-volume
+        persistentVolumeClaim:
+          claimName: prometheus-storage
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: prometheus
   namespace: monitoring
-spec:
-  selector:
+  labels:
     app: prometheus
+spec:
+  type: ClusterIP
   ports:
   - port: 9090
     targetPort: 9090
-  type: ClusterIP
+    name: web
+  selector:
+    app: prometheus
+    component: server
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-storage
+  namespace: monitoring
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: gp3

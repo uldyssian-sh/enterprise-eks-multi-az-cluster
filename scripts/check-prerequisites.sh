@@ -1,72 +1,115 @@
 #!/bin/bash
 
-set -e
+# Enterprise EKS Prerequisites Checker
+# Validates all required tools and configurations for enterprise deployment
 
-echo "🔍 Checking prerequisites for enterprise EKS deployment..."
+set -euo pipefail
 
-# Check required tools
-REQUIRED_TOOLS=("terraform" "kubectl" "aws" "helm" "git")
-MISSING_TOOLS=()
+REQUIRED_TOOLS=("aws" "kubectl" "terraform" "helm" "jq")
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOG_FILE="${SCRIPT_DIR}/prerequisites.log"
 
-for tool in "${REQUIRED_TOOLS[@]}"; do
-    if ! command -v "$tool" >/dev/null 2>&1; then
-        MISSING_TOOLS+=("$tool")
-    else
-        if $tool --version >/dev/null 2>&1; then
-            VERSION=$($tool --version 2>/dev/null | head -n1)
+# Logging function
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "${LOG_FILE}"
+}
+
+# Check if required tools are installed
+check_tools() {
+    log "Checking required tools..."
+    local missing_tools=()
+    
+    for tool in "${REQUIRED_TOOLS[@]}"; do
+        if ! command -v "${tool}" &> /dev/null; then
+            missing_tools+=("${tool}")
         else
-            VERSION="unknown"
+            log "✓ ${tool} is installed"
         fi
-        echo "✅ $tool: $VERSION"
+    done
+    
+    if [ ${#missing_tools[@]} -ne 0 ]; then
+        log "❌ Missing tools: ${missing_tools[*]}"
+        exit 1
     fi
-done
+}
 
-if [ ${#MISSING_TOOLS[@]} -ne 0 ]; then
-    echo "❌ Missing required tools: ${MISSING_TOOLS[*]}"
-    exit 1
-fi
-
-# Check AWS credentials
-echo "🔐 Checking AWS credentials..."
-if aws sts get-caller-identity >/dev/null 2>&1; then
-    CALLER_IDENTITY=$(aws sts get-caller-identity)
-    ACCOUNT=$(echo "$CALLER_IDENTITY" | jq -r '.Account')
-    USER=$(echo "$CALLER_IDENTITY" | jq -r '.Arn')
-    echo "✅ AWS credentials valid: $USER (Account: $ACCOUNT)"
-else
-    echo "❌ AWS credentials not configured"
-    exit 1
-fi
-
-# Check AWS permissions
-echo "🔑 Checking AWS permissions..."
-REQUIRED_PERMISSIONS=("eks:CreateCluster" "ec2:CreateVpc" "iam:CreateRole")
-for perm in "${REQUIRED_PERMISSIONS[@]}"; do
-    if aws iam simulate-principal-policy --policy-source-arn "$USER" --action-names "$perm" --resource-arns "*" --query 'EvaluationResults[0].EvalDecision' --output text 2>/dev/null | grep -q "allowed"; then
-        echo "✅ $perm: allowed"
+# Check AWS credentials with proper error handling
+check_aws_credentials() {
+    log "Checking AWS credentials..."
+    
+    if ! aws sts get-caller-identity &> /dev/null; then
+        log "❌ AWS credentials not configured"
+        exit 1
+    fi
+    
+    # Safe JSON parsing with error handling
+    if command -v jq &> /dev/null; then
+        local account_id
+        local user_arn
+        account_id=$(aws sts get-caller-identity --query 'Account' --output text 2>/dev/null || echo "unknown")
+        user_arn=$(aws sts get-caller-identity --query 'Arn' --output text 2>/dev/null || echo "unknown")
+        log "✓ AWS Account: ${account_id}"
+        log "✓ User ARN: ${user_arn}"
     else
-        echo "⚠️ $perm: may be restricted"
+        log "✓ AWS credentials configured (jq not available for detailed info)"
     fi
-done
+}
 
-# Check disk space
-echo "💾 Checking disk space..."
-AVAILABLE_SPACE=$(df -h . | awk 'NR==2 {print $4}')
-SPACE_NUM=${AVAILABLE_SPACE//[^0-9.]/}
-SPACE_UNIT=${AVAILABLE_SPACE//[0-9.]/}
+# Check kubectl configuration
+check_kubectl() {
+    log "Checking kubectl configuration..."
+    
+    if ! kubectl cluster-info &> /dev/null; then
+        log "⚠️  kubectl not configured for any cluster"
+    else
+        local context
+        context=$(kubectl config current-context 2>/dev/null || echo "unknown")
+        log "✓ kubectl configured for context: ${context}"
+    fi
+}
 
-case "$SPACE_UNIT" in
-    "G"|"g") SPACE_GB="$SPACE_NUM" ;;
-    "T"|"t") SPACE_GB=$((SPACE_NUM * 1024)) ;;
-    "M"|"m") SPACE_GB=$((SPACE_NUM / 1024)) ;;
-    "K"|"k") SPACE_GB=$((SPACE_NUM / 1024 / 1024)) ;;
-    *) SPACE_GB=0 ;;
-esac
+# Check disk space with proper arithmetic handling
+check_disk_space() {
+    log "Checking disk space..."
+    
+    local available_gb
+    local space_num
+    
+    # Get available space in GB, handle decimal values properly
+    space_num=$(df -BG . | awk 'NR==2 {print $4}' | sed 's/G//')
+    
+    # Convert to integer for arithmetic operations
+    available_gb=${space_num%.*}
+    
+    if [ "${available_gb}" -lt 10 ]; then
+        log "❌ Insufficient disk space: ${available_gb}GB available, 10GB required"
+        exit 1
+    else
+        log "✓ Sufficient disk space: ${available_gb}GB available"
+    fi
+}
 
-if [ "${SPACE_GB%.*}" -gt 10 ]; then
-    echo "✅ Disk space: ${AVAILABLE_SPACE} available"
-else
-    echo "⚠️ Low disk space: ${AVAILABLE_SPACE} (recommend 10G+)"
-fi
+# Check Terraform version
+check_terraform_version() {
+    log "Checking Terraform version..."
+    
+    local tf_version
+    tf_version=$(terraform version -json 2>/dev/null | jq -r '.terraform_version' 2>/dev/null || terraform version | head -1 | cut -d' ' -f2 | sed 's/v//')
+    
+    log "✓ Terraform version: ${tf_version}"
+}
 
-echo "✅ Prerequisites check completed successfully!"
+# Main execution
+main() {
+    log "Starting enterprise prerequisites check..."
+    
+    check_tools
+    check_aws_credentials
+    check_kubectl
+    check_disk_space
+    check_terraform_version
+    
+    log "✅ All prerequisites check passed"
+}
+
+main "$@"

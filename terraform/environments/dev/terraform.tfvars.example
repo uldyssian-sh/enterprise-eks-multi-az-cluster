@@ -1,0 +1,128 @@
+# Enterprise EKS Multi-AZ Cluster Configuration
+# Development Environment
+
+# Basic Configuration
+cluster_name = "eks-multi-az-cluster-dev"
+region       = "us-west-2"
+environment  = "development"
+
+# VPC Configuration
+vpc_cidr             = "10.0.0.0/16"
+availability_zones   = ["us-west-2a", "us-west-2b", "us-west-2c"]
+enable_nat_gateway   = true
+single_nat_gateway   = false
+enable_dns_hostnames = true
+enable_dns_support   = true
+
+# EKS Configuration
+kubernetes_version = "1.28"
+endpoint_private_access = true
+endpoint_public_access  = true
+endpoint_public_access_cidrs = ["0.0.0.0/0"]
+
+# Node Groups Configuration
+node_groups = {
+  system = {
+    instance_types = ["t3.medium"]
+    min_size      = 3
+    max_size      = 9
+    desired_size  = 3
+    disk_size     = 50
+    
+    labels = {
+      role = "system"
+    }
+    
+    taints = [{
+      key    = "CriticalAddonsOnly"
+      value  = "true"
+      effect = "NO_SCHEDULE"
+    }]
+  }
+  
+  applications = {
+    instance_types = ["c5.large"]
+    min_size      = 3
+    max_size      = 15
+    desired_size  = 6
+    disk_size     = 100
+    
+    labels = {
+      role = "applications"
+    }
+  }
+  
+  databases = {
+    instance_types = ["r5.large"]
+    min_size      = 2
+    max_size      = 8
+    desired_size  = 3
+    disk_size     = 200
+    
+    labels = {
+      role = "databases"
+    }
+    
+    taints = [{
+      key    = "databases"
+      value  = "true"
+      effect = "NO_SCHEDULE"
+    }]
+  }
+}
+
+# Monitoring Configuration
+enable_monitoring = true
+log_retention_days = 30
+alert_emails = [
+  "devops-team@company.com",
+  "infrastructure@company.com"
+]
+
+# Security Configuration
+enable_irsa = true
+enable_cluster_encryption = true
+cluster_encryption_config = [{
+  provider_key_arn = "arn:aws:kms:us-west-2:ACCOUNT_ID:key/KEY_ID"
+  resources        = ["secrets"]
+}]
+
+# Cost Optimization
+enable_spot_instances = true
+spot_instance_types = ["c5.large", "c5.xlarge", "m5.large", "m5.xlarge"]
+spot_allocation_strategy = "diversified"
+
+# Backup Configuration
+enable_backups = true
+backup_retention_days = 7
+backup_schedule = "0 2 * * *"
+
+# Network Security
+enable_network_policy = true
+enable_pod_security_policy = true
+
+# Add-ons Configuration
+cluster_addons = {
+  coredns = {
+    most_recent = true
+  }
+  kube-proxy = {
+    most_recent = true
+  }
+  vpc-cni = {
+    most_recent = true
+  }
+  aws-ebs-csi-driver = {
+    most_recent = true
+  }
+}
+
+# Tags
+tags = {
+  Environment   = "development"
+  Project       = "enterprise-eks"
+  Owner         = "devops-team"
+  CostCenter    = "infrastructure"
+  Backup        = "required"
+  Compliance    = "required"
+}
