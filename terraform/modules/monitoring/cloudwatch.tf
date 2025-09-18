@@ -43,7 +43,6 @@ resource "aws_cloudwatch_dashboard" "eks" {
     ]
   })
 
-  tags = var.tags
 }
 
 resource "aws_cloudwatch_metric_alarm" "node_cpu_high" {
@@ -86,7 +85,7 @@ resource "aws_cloudwatch_metric_alarm" "pod_restart_high" {
 
 resource "aws_cloudwatch_log_metric_filter" "error_count" {
   name           = "${var.cluster_name}-error-count"
-  log_group_name = aws_cloudwatch_log_group.eks["application"].name
+  log_group_name = aws_cloudwatch_log_group.eks.name
   pattern        = "ERROR"
 
   metric_transformation {
