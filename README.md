@@ -70,19 +70,17 @@ git clone https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster.git
 cd enterprise-eks-multi-az-cluster
 
 # Configure variables
-cp terraform.tfvars.example terraform.tfvars
+cp terraform/environments/dev/terraform.tfvars.example terraform/environments/dev/terraform.tfvars
 # Edit terraform.tfvars with your settings
 
 # Deploy infrastructure
+cd terraform/environments/dev
 terraform init
 terraform plan
 terraform apply
 
 # Update kubeconfig
-aws eks update-kubeconfig --region us-west-2 --name enterprise-eks-cluster
-
-# Install essential add-ons
-./scripts/install-addons.sh
+aws eks update-kubeconfig --region us-west-2 --name eks-multi-az-cluster-dev
 
 # Verify deployment
 kubectl get nodes
@@ -153,33 +151,32 @@ spec:
 
 ## 📚 Documentation
 
-### Architecture & Design
-- **[Architecture Guide](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Architecture)** - Detailed system architecture
-- **[Network Design](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Network-Design)** - VPC and subnet configuration
-- **[Security Architecture](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Security-Architecture)** - Security controls and policies
+### Getting Started
+- **[Enterprise Deployment Guide](docs/ENTERPRISE_DEPLOYMENT.md)** - Complete deployment instructions
+- **[Prerequisites Check](scripts/check-prerequisites.sh)** - Validate environment setup
+- **[Configuration Examples](terraform/environments/dev/terraform.tfvars.example)** - Sample configurations
 
 ### Operations
-- **[Deployment Guide](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Deployment)** - Step-by-step deployment
-- **[Monitoring Setup](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Monitoring)** - Observability configuration
-- **[Disaster Recovery](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Disaster-Recovery)** - DR procedures and testing
-- **[Troubleshooting](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Troubleshooting)** - Common issues and solutions
+- **[Security Scanning](scripts/security-scan.sh)** - Automated security assessment
+- **[Monitoring Setup](k8s/monitoring/)** - Prometheus and Grafana configuration
+- **[Backup Validation](scripts/verify-backups.sh)** - Backup verification procedures
 
-### Security & Compliance
-- **[Security Hardening](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Security)** - Security best practices
-- **[Compliance Guide](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Compliance)** - Regulatory compliance
-- **[Audit Procedures](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Audit)** - Security audit processes
+### Kubernetes Manifests
+- **[Monitoring Stack](k8s/monitoring/)** - Complete monitoring deployment
+- **[Security Policies](k8s/security/)** - Network policies and security configurations
+- **[Ingress Configuration](k8s/ingress/)** - Load balancer and ingress setup
 
 ## 🔗 Integration
 
-### CI/CD Platforms
-- **[Jenkins](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Jenkins-Integration)** - Pipeline automation
-- **[GitLab CI](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/GitLab-CI)** - GitLab integration
-- **[GitHub Actions](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/GitHub-Actions)** - GitHub workflows
+### CI/CD Pipeline
+- **[GitHub Actions](.github/workflows/enterprise-ci.yml)** - Automated testing and deployment
+- **[Security Scanning](.github/workflows/security.yml)** - Vulnerability assessment
+- **[Cost Estimation](terraform/modules/cost-optimization/)** - Infrastructure cost analysis
 
-### Monitoring & Observability
-- **[Datadog](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Datadog-Integration)** - APM and infrastructure monitoring
-- **[New Relic](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/NewRelic-Integration)** - Application performance monitoring
-- **[Splunk](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Splunk-Integration)** - Log analysis and SIEM
+### Terraform Modules
+- **[EKS Module](terraform/modules/eks/)** - Complete EKS cluster configuration
+- **[VPC Module](terraform/modules/vpc/)** - Network infrastructure
+- **[Monitoring Module](terraform/modules/monitoring/)** - Observability stack
 
 ## 💰 Cost Optimization
 
@@ -190,25 +187,19 @@ spec:
 - **Fargate** - Serverless containers for variable workloads
 - **Right-sizing** - Automated resource optimization
 
-### Cost Monitoring
-- **[AWS Cost Explorer](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Cost-Monitoring)** - Cost analysis and forecasting
-- **[Kubecost](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Kubecost-Integration)** - Kubernetes cost allocation
-- **[Cost Optimization](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Cost-Optimization)** - Best practices and tools
-
 ## 🤝 Contributing
 
 1. **[Fork Repository](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/fork)** - Create your fork
-2. **[Development Setup](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Development-Setup)** - Local development environment
-3. **[Testing Guidelines](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki/Testing)** - Testing procedures
-4. **[Submit Pull Request](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/pulls)** - Contribute improvements
+2. **[Development Setup](docs/ENTERPRISE_DEPLOYMENT.md)** - Local development environment
+3. **[Submit Pull Request](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/pulls)** - Contribute improvements
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the **[LICENSE](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/blob/main/LICENSE)** file for details.
+This project is licensed under the MIT License - see the **[LICENSE](LICENSE)** file for details.
 
 ## 🆘 Support
 
 - **[GitHub Issues](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/issues)** - Bug reports and feature requests
 - **[Discussions](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/discussions)** - Community support and Q&A
-- **[Wiki](https://github.com/uldyssian-sh/enterprise-eks-multi-az-cluster/wiki)** - Comprehensive documentation
+- **[Security Policy](SECURITY.md)** - Vulnerability reporting
 - **[AWS EKS Documentation](https://docs.aws.amazon.com/eks/)** - Official AWS EKS documentation
