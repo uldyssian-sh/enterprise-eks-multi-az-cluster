@@ -1,28 +1,56 @@
-variable "cluster_name" {
-  description = "Name of the EKS cluster"
+variable "name" {
+  description = "Name to be used on all the resources as identifier"
   type        = string
 }
 
-variable "vpc_cidr" {
-  description = "CIDR block for VPC"
+variable "cidr" {
+  description = "The CIDR block for the VPC"
   type        = string
-  default     = "10.0.0.0/16"
 }
 
-variable "private_subnet_cidrs" {
-  description = "CIDR blocks for private subnets"
+variable "azs" {
+  description = "A list of availability zones names or ids in the region"
   type        = list(string)
-  default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 }
 
-variable "public_subnet_cidrs" {
-  description = "CIDR blocks for public subnets"
+variable "private_subnets" {
+  description = "A list of private subnets inside the VPC"
   type        = list(string)
-  default     = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  default     = []
+}
+
+variable "public_subnets" {
+  description = "A list of public subnets inside the VPC"
+  type        = list(string)
+  default     = []
+}
+
+variable "enable_nat_gateway" {
+  description = "Should be true if you want to provision NAT Gateways for each of your private networks"
+  type        = bool
+  default     = false
+}
+
+variable "single_nat_gateway" {
+  description = "Should be true if you want to provision a single shared NAT Gateway across all of your private networks"
+  type        = bool
+  default     = false
+}
+
+variable "enable_dns_hostnames" {
+  description = "Should be true to enable DNS hostnames in the VPC"
+  type        = bool
+  default     = false
+}
+
+variable "enable_dns_support" {
+  description = "Should be true to enable DNS support in the VPC"
+  type        = bool
+  default     = true
 }
 
 variable "tags" {
-  description = "A map of tags to add to all resources"
+  description = "A map of tags to assign to the resource"
   type        = map(string)
   default     = {}
 }
